@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="93">
+	<author>Farmsim Tim (timmeey86)</author>
+	<version>0.1.0.0</version>
+	<title>
+		<en>Tool Inclination Helper</en>
+		<de>Werkzeugneigungshelfer</de>
+	</title>
+	
+	<description>
+		<en><![CDATA[
+Description: This mod displays whether or not your forks (or other implements) are level (= horizontal orientation) or not.
+
+If the tool is tilted down too much, an upwards arrow will appear, if it is tilted up too much, a downwards arrow will appear.
+
+The icon is currently displayed in a fixed position to the bottom-left of the speed dial.
+
+Hotkeys: None yet
+
+GitHub link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
+]]></en>
+		<de><![CDATA[
+Beschreibung: Diese Mod zeigt an, ob deine Gabeln (oder andere Geräte) eben sind (also horizontal ausgerichtet) oder nicht.
+
+Wenn das Gerät zu weit nach unten geneigt ist, erscheint ein Pfeil nach oben, wenn es zu weit nach oben geneigt ist, erscheint ein Pfeil nach unten.
+
+Das Symbol wird momentan in einer festen Position links unterhalb des Tachos angezeigt.
+
+Tastenkombinationen: Bisher noch keine
+
+GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
+]]></de>
+	</description>
+	
+	<multiplayer supported="true" />
+
+	<iconFilename>icon_ToolInclinationHelper.dds</iconFilename>
+
+	<extraSourceFiles>
+		<sourceFile filename="scripts/lib/UIHelper.lua" />
+		<sourceFile filename="scripts/ToolInclinationHUD.lua" />
+		<sourceFile filename="scripts/ToolInclinationHelper.lua" />
+	</extraSourceFiles>
+
+	<l10n filenamePrefix="i18n/locale" />
+</modDesc>
