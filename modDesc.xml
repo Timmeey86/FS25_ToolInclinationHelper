@@ -11,6 +11,8 @@
 		<en><![CDATA[
 Description: This mod displays whether or not your forks (or other implements) are level (= horizontal orientation) or not.
 
+THIS IS AN ALPHA VERSION AND WILL MOST LIKELY NOT WORK PROPERLY WITH UPCOMING MODS
+
 If the tool is tilted down too much, an upwards arrow will appear, if it is tilted up too much, a downwards arrow will appear.
 
 The icon is currently displayed in a fixed position to the bottom-left of the speed dial.
@@ -21,6 +23,8 @@ GitHub link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 ]]></en>
 		<de><![CDATA[
 Beschreibung: Diese Mod zeigt an, ob deine Gabeln (oder andere Geräte) eben sind (also horizontal ausgerichtet) oder nicht.
+
+DIES IST EINE ALPHA VERSION UND WIRD SEHR WAHRSCHEINLICH MIT DEN KOMMENDEN MODS NICHT FUNKTIONIEREN
 
 Wenn das Gerät zu weit nach unten geneigt ist, erscheint ein Pfeil nach oben, wenn es zu weit nach oben geneigt ist, erscheint ein Pfeil nach unten.
 
@@ -38,6 +42,7 @@ GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 
 	<extraSourceFiles>
 		<sourceFile filename="scripts/lib/UIHelper.lua" />
+		<sourceFile filename="scripts/ToolFinder.lua" />
 		<sourceFile filename="scripts/ToolInclinationHUD.lua" />
 		<sourceFile filename="scripts/ToolInclinationHelper.lua" />
 	</extraSourceFiles>
