@@ -37,6 +37,11 @@ function ToolFinder.findSupportedTool(vehicle)
 					return furtherImplement
 				end
 			end
+
+			-- Another special case: 3 point forks
+			if implement.object.typeName == "dynamicMountAttacherFork" then
+				return ToolFinder.findForkliftForks(implement.object)
+			end
 		end
 	end
 
@@ -62,13 +67,13 @@ function ToolFinder.findForkliftForks(vehicle)
 		i3dAsXml:iterate("i3D.Scene.Shape", function(index, shapeXmlPath)
 			local shapeName = i3dAsXml:getString(shapeXmlPath .. "#name")
 			if shapeName:find("fork") then
-				print("Found forks in component # " .. tostring(index))
+				print(MOD_NAME .. ": Found forks in component # " .. tostring(index))
+				vehicle.forkComponentIndex = index
 				local translation = i3dAsXml:getVector(shapeXmlPath .. "#translation")
 				if translation then
-					vehicle.forkYOffset = translation[2]
-					print("Found Y offset " .. tostring(translation[2]))
+					vehicle.components[vehicle.forkComponentIndex].forkYOffset = translation[2]
+					print(MOD_NAME .. ": Found Y offset " .. tostring(translation[2]))
 				end
-				vehicle.forkComponentIndex = index
 				return -- stop searching
 			end
 		end)
@@ -77,9 +82,6 @@ function ToolFinder.findForkliftForks(vehicle)
 	if vehicle.forkComponentIndex then
 		return vehicle.components[vehicle.forkComponentIndex]
 	end
-
-	Logging.error("Failed resolving forklift")
-	printCallstack()
 
 	return nil
 end

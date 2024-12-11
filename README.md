@@ -1,5 +1,9 @@
 # FS25_ForkLeveler
 
+## Acknowledgements
+
+The mod icon uses icons from [Forklift icons created by Freepik - Flaticon]("https://www.flaticon.com/free-icons/forklift")
+
 ## Modhub Link
 
 pending

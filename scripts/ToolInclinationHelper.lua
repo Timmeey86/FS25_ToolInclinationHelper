@@ -95,7 +95,7 @@ function ToolInclinationHelper.getDistanceFromGround(vehicle, tool)
 	-- Raycast downwards 10m from the tool's origin (we need to be this high because of telehandlers)
 	local maxDistance = 10
 	raycastAll(x, y, z, 0, -1, 0, maxDistance, "raycastCallback", raycastParams, CollisionFlag.TERRAIN + CollisionFlag.STATIC_OBJECT)
-	return ToolInclinationHelper.getAdjustedGroundDistance(vehicle, raycastParams.groundDistance)
+	return ToolInclinationHelper.getAdjustedGroundDistance(tool, raycastParams.groundDistance)
 end
 
 ---Removes a potential Y offset from the ground distance. This is used for vehicles like base game forklift forks which don't have their "origin" on the ground.
