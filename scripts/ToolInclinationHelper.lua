@@ -1,13 +1,26 @@
 local MOD_DIR = g_currentModDirectory
-
+MOD_NAME = g_currentModName
 
 ToolInclinationHelper = {}
 ToolInclinationHelper.hud = nil
+ToolInclinationHelper.settings = TIHSettings.new()
 Mission00.loadMission00Finished = Utils.appendedFunction(Mission00.loadMission00Finished, function()
 
+	-- Initialize settings
+	ToolInclinationHelper.settings:init(g_currentMission.hud.speedMeter)
+	-- If there are stored settings, use those values instead
+	TIHSettingsRepository.restoreSettings(ToolInclinationHelper.settings)
+	-- Save settings when the savegame is being saved
+	FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, function()
+		TIHSettingsRepository.storeSettings(ToolInclinationHelper.settings)
+	end)
+
+	-- Initialize the HUD
 	ToolInclinationHelper.hud = ToolInclinationHUD.new(g_currentMission.hud.speedMeter, MOD_DIR)
 	ToolInclinationHelper.hud:load()
 
+	-- Draw our icon when the base game HUD is drawn.
+	-- Note that overwriting HUD.drawControlledEntityHUD at this point in time seems to be too late, so we overwrite the function in the instance instead.
 	g_currentMission.hud.drawControlledEntityHUD = Utils.appendedFunction(g_currentMission.hud.drawControlledEntityHUD, function(self)
 		if self.isVisible then
 			local isVisible, direction, tool = ToolInclinationHelper.getCurrentToolInclination(self.controlledVehicle)
