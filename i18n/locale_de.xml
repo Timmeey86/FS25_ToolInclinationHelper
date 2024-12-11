@@ -2,6 +2,10 @@
 <l10n>
 	<translationContributors/>
 	<texts>
-		<text name="tmp" text="tmp" />
+		<text name="tih_section_title" text="Tool Inclination Helper" />
+		<text name="tih_baseX_short" text="Base X coordinate" />
+		<text name="tih_baseX_long" text="The distance of the up/down/level icon from the left screen border in pixels, assuming a resolution of 1920x1080" />
+		<text name="tih_baseY_short" text="Base Y coordinate" />
+		<text name="tih_baseY_long" text="The distance of the up/down/level icon from the bottom screen border in pixels, assuming a resolution of 1920x1080" />
 	</texts>
 </l10n>

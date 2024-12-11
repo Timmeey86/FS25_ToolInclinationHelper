@@ -2,6 +2,10 @@
 <l10n>
 	<translationContributors/>
 	<texts>
-		<text name="tmp" text="tmp" />
+		<text name="tih_section_title" text="Tool Inclination Helper" />
+		<text name="tih_baseX_short" text="Base X coordinate" />
+		<text name="tih_baseX_long" text="Increase this in order to move the overlay to the right, decrease it in order to move to the left." />
+		<text name="tih_baseY_short" text="Base Y coordinate" />
+		<text name="tih_baseY_long" text="Increase this in order to move the overlay upwards, decrease it in order to move it downwards." />
 	</texts>
 </l10n>

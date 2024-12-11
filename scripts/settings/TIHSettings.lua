@@ -14,21 +14,12 @@ local TIHSettings_mt = Class(TIHSettings)
 ---@return TIHSettings @the new instance
 function TIHSettings.new()
 	local self = setmetatable({}, TIHSettings_mt)
+	-- Location of the speedmeter in version 1.3.0.0 (roughly)
 	self.baseLocation = {
-		x = 0,
-		y = 0
+		x = 1560,
+		y = 30
 	}
 	return self
-end
-
----Initializes the settings object with default values
----@param speedMeter SpeedMeterDisplay @The base game speed dial
-function TIHSettings:init(speedMeter)
-	-- Convert the relative locations of the speed dial which range from 0..1, 0..1 back to a pixel value for full HD resolution
-	self.baseLocation.x, self.baseLocation.y =
-		speedMeter.speedBg.x / speedMeter.uiScale / g_aspectScaleX * g_referenceScreenWidth,
-		speedMeter.speedBg.y / speedMeter.uiScale / g_aspectScaleY * g_referenceScreenHeight
-	printf("%s: Initialized base location from %.5f, %.5f to %d, %d", MOD_NAME, speedMeter.speedBg.x, speedMeter.speedBg.y, self.baseLocation.x, self.baseLocation.y)
 end
 
 -- Retrieves the base location in relative screen coordinates (0..1)

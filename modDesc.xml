@@ -44,6 +44,7 @@ GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 		<sourceFile filename="scripts/lib/UIHelper.lua" />
 		<sourceFile filename="scripts/settings/TIHSettings.lua" />
 		<sourceFile filename="scripts/settings/TIHSettingsRepository.lua" />
+		<sourceFile filename="scripts/settings/TIHSettingsUI.lua" />
 		<sourceFile filename="scripts/ToolFinder.lua" />
 		<sourceFile filename="scripts/ToolInclinationHUD.lua" />
 		<sourceFile filename="scripts/ToolInclinationHelper.lua" />
