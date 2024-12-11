@@ -2,10 +2,10 @@
 <l10n>
 	<translationContributors/>
 	<texts>
-		<text name="tih_section_title" text="Tool Inclination Helper" />
-		<text name="tih_baseX_short" text="Base X coordinate" />
-		<text name="tih_baseX_long" text="The distance of the up/down/level icon from the left screen border in pixels, assuming a resolution of 1920x1080" />
-		<text name="tih_baseY_short" text="Base Y coordinate" />
-		<text name="tih_baseY_long" text="The distance of the up/down/level icon from the bottom screen border in pixels, assuming a resolution of 1920x1080" />
+		<text name="tih_section_title" text="Werkzeugneigungshelfer" />
+		<text name="tih_baseX_short" text="Referenz-X-Koordinate für die Anzeige" />
+		<text name="tih_baseX_long" text="Erhöhe den Wert, um die Anzeige nach rechts zu verschieben oder verringere den Wert, um sie nach links zu verschieben." />
+		<text name="tih_baseY_short" text="Referenz-Y-Koordinate für die Anzeige" />
+		<text name="tih_baseY_long" text="Erhöhe den Wert, um die Anzeige weiter hoch zu schieben oder verringere ihn, um sie nach unten zu verschieben." />
 	</texts>
 </l10n>

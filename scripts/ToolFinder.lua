@@ -17,7 +17,7 @@ function ToolFinder.findSupportedTool(vehicle)
 	if category == "forklifts" then
 		-- TODO: This works for both basegame forklifts but will likely not support modded forklifts.
 		-- Maybe we can loop through the components and see which ones are affected by joystick movements or something
-		return vehicle.components[3]
+		return ToolFinder.findForkliftForks(vehicle)
 	end
 
 	-- Find the first attachment which is within the given tool categories
@@ -41,5 +41,45 @@ function ToolFinder.findSupportedTool(vehicle)
 	end
 
 	-- Nothing was found
+	return nil
+end
+
+---Tries finding the forks of the forklift
+---@param vehicle Vehicle @the forklift
+---@return table|nil @The UI component for the forks
+function ToolFinder.findForkliftForks(vehicle)
+
+	if vehicle.forkComponentIndex ~= nil then
+		return vehicle.components[vehicle.forkComponentIndex]
+	end
+
+	-- Load the i3D as an XML file in order to find values.
+	-- Only do this once for each vehicle, however
+	local i3dAsXml = XMLFile.load("Vehicle i3D as XML", vehicle.i3dFilename, nil)
+	if i3dAsXml then
+		-- Try finding the first component which has "forks" in the name. Any mod which names the components like Giants does, will be supported that way
+		-- That seems like the best option for now
+		i3dAsXml:iterate("i3D.Scene.Shape", function(index, shapeXmlPath)
+			local shapeName = i3dAsXml:getString(shapeXmlPath .. "#name")
+			if shapeName:find("fork") then
+				print("Found forks in component # " .. tostring(index))
+				local translation = i3dAsXml:getVector(shapeXmlPath .. "#translation")
+				if translation then
+					vehicle.forkYOffset = translation[2]
+					print("Found Y offset " .. tostring(translation[2]))
+				end
+				vehicle.forkComponentIndex = index
+				return -- stop searching
+			end
+		end)
+	end
+
+	if vehicle.forkComponentIndex then
+		return vehicle.components[vehicle.forkComponentIndex]
+	end
+
+	Logging.error("Failed resolving forklift")
+	printCallstack()
+
 	return nil
 end

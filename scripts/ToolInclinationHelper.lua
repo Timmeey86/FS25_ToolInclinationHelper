@@ -95,17 +95,16 @@ function ToolInclinationHelper.getDistanceFromGround(vehicle, tool)
 	-- Raycast downwards 10m from the tool's origin (we need to be this high because of telehandlers)
 	local maxDistance = 10
 	raycastAll(x, y, z, 0, -1, 0, maxDistance, "raycastCallback", raycastParams, CollisionFlag.TERRAIN + CollisionFlag.STATIC_OBJECT)
-	return ToolInclinationHelper.dirtyWorkaroundForForklifts(vehicle, raycastParams.groundDistance)
+	return ToolInclinationHelper.getAdjustedGroundDistance(vehicle, raycastParams.groundDistance)
 end
 
--- TODO: Find out how to calculate distance to ground properly for these
-function ToolInclinationHelper.dirtyWorkaroundForForklifts(vehicle, distanceToGround)
-	local configFileName = vehicle.configFileName
-	local storeItem = g_storeManager:getItemByXMLFilename(configFileName)
-	if storeItem.brandNameRaw == "JUNGHEINRICH" and storeItem.name == "EFG S50" then
-		return distanceToGround - 0.4
-	elseif storeItem.brandNameRaw == "MANITOU" and storeItem.name == "M50-4" then
-		return distanceToGround - 0.8
+---Removes a potential Y offset from the ground distance. This is used for vehicles like base game forklift forks which don't have their "origin" on the ground.
+---@param vehicle Vehicle @The vehicle
+---@param distanceToGround number @The distance to the ground in meters
+---@return number @The potentially adjusted ground distance
+function ToolInclinationHelper.getAdjustedGroundDistance(vehicle, distanceToGround)
+	if vehicle.forkYOffset ~= nil then
+		return distanceToGround - vehicle.forkYOffset
 	else
 		return distanceToGround
 	end
