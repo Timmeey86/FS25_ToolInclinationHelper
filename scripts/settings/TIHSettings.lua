@@ -24,5 +24,17 @@ end
 ---Initializes the settings object with default values
 ---@param speedMeter SpeedMeterDisplay @The base game speed dial
 function TIHSettings:init(speedMeter)
-	self.baseLocation.x, self.baseLocation.y = speedMeter:scalePixelValuesToScreenVector(table.unpack(ToolInclinationHUD.POSITIONS.BG))
+	-- Convert the relative locations of the speed dial which range from 0..1, 0..1 back to a pixel value for full HD resolution
+	self.baseLocation.x, self.baseLocation.y =
+		speedMeter.speedBg.x / speedMeter.uiScale / g_aspectScaleX * g_referenceScreenWidth,
+		speedMeter.speedBg.y / speedMeter.uiScale / g_aspectScaleY * g_referenceScreenHeight
+	printf("%s: Initialized base location from %.5f, %.5f to %d, %d", MOD_NAME, speedMeter.speedBg.x, speedMeter.speedBg.y, self.baseLocation.x, self.baseLocation.y)
+end
+
+-- Retrieves the base location in relative screen coordinates (0..1)
+---@param speedMeter SpeedMeterDisplay @The base game speed dial
+---@return number @The X coordinate in relative coordinates
+---@return number @The Y coordinate in relative coordinates
+function TIHSettings:getRelativeBaseLocation(speedMeter)
+	return speedMeter:scalePixelValuesToScreenVector(self.baseLocation.x, self.baseLocation.y)
 end

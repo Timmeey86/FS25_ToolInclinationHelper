@@ -130,7 +130,8 @@ end
 
 function ToolInclinationHUD:setScaledPos(element, relativePixelPos)
 	local xRel, yRel = self.speedMeter:scalePixelValuesToScreenVector(table.unpack(relativePixelPos))
-	element:setPosition(ToolInclinationHelper.settings.baseLocation.x + xRel, ToolInclinationHelper.settings.baseLocation.y + yRel)
+	local baseX, baseY = ToolInclinationHelper.settings:getRelativeBaseLocation(self.speedMeter)
+	element:setPosition(baseX + xRel, baseY + yRel)
 end
 
 function ToolInclinationHUD:drawHUD()
@@ -154,7 +155,8 @@ function ToolInclinationHUD:drawHUD()
 			ToolInclinationHUD.POSITIONS.DISTANCE_BG[1] + ToolInclinationHUD.POSITIONS.DISTANCE_TEXT[1],
 			ToolInclinationHUD.POSITIONS.DISTANCE_BG[2] + ToolInclinationHUD.POSITIONS.DISTANCE_TEXT[2]
 		local xRel, yRel = self.speedMeter:scalePixelValuesToScreenVector(xPixelRel, yPixelRel)
-		renderText(self.speedMeter.speedBg.x + xRel, self.speedMeter.speedBg.y + yRel, self.distanceText.size, self.distanceText.text)
+		local baseX, baseY = ToolInclinationHelper.settings:getRelativeBaseLocation(self.speedMeter)
+		renderText(baseX + xRel, baseY + yRel, self.distanceText.size, self.distanceText.text)
 	end
 end
 
