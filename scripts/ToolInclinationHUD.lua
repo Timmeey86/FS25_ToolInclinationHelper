@@ -156,7 +156,7 @@ function ToolInclinationHUD:drawHUD()
 			ToolInclinationHUD.POSITIONS.DISTANCE_BG[2] + ToolInclinationHUD.POSITIONS.DISTANCE_TEXT[2]
 		local xRel, yRel = self.speedMeter:scalePixelValuesToScreenVector(xPixelRel, yPixelRel)
 		local baseX, baseY = ToolInclinationHelper.settings:getRelativeBaseLocation(self.speedMeter)
-		renderText(baseX + xRel, baseY + yRel, self.distanceText.size, self.distanceText.text)
+		renderText(baseX + xRel, baseY + yRel, self.distanceText.size * self.speedMeter.uiScale, self.distanceText.text)
 	end
 end
 

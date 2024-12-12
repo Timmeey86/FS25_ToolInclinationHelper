@@ -20,7 +20,7 @@ Mission00.loadMission00Finished = Utils.appendedFunction(Mission00.loadMission00
 
 	-- Initialize the UI
 	local ui = TIHSettingsUI.new(ToolInclinationHelper.settings)
-	ui:injectUiSettings()
+	--ui:injectUiSettings()
 
 	-- Draw our icon when the base game HUD is drawn.
 	-- Note that overwriting HUD.drawControlledEntityHUD at this point in time seems to be too late, so we overwrite the function in the instance instead.

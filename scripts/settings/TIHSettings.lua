@@ -27,5 +27,5 @@ end
 ---@return number @The X coordinate in relative coordinates
 ---@return number @The Y coordinate in relative coordinates
 function TIHSettings:getRelativeBaseLocation(speedMeter)
-	return speedMeter:scalePixelValuesToScreenVector(self.baseLocation.x, self.baseLocation.y)
+	return speedMeter.speedBg.x, speedMeter.speedBg.y
 end
