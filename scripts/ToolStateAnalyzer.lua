@@ -22,8 +22,8 @@ function ToolStateAnalyzer.getCurrentToolInclination(vehicle)
 	-- Get the current inclination of the tool. RootNode for implements, Node for components like with forklifts
 	local node = tool.rootNode or tool.node
 	local x, y, z = localToWorld(node, 0, 0, 0)
-	local xx, xy, xz = localToWorld(node, 0, 0, 1)
-	local pitch, _ = MathUtil.directionToPitchYaw(xx - x, xy - y, xz - z)
+	local zx, zy, zz = localToWorld(node, 0, 0, 1)
+	local pitch, _ = MathUtil.directionToPitchYaw(zx - x, zy - y, zz - z)
 	pitch = math.deg(pitch)
 
 	return true, pitch, tool
@@ -53,10 +53,12 @@ function ToolStateAnalyzer.getDistanceFromGround(vehicle, tool)
 		object = tool,
 		groundDistance = 0
 	}
-	local x, y, z = localToWorld(node, 0, 0, 0)
+	-- Note: We move the search location half a meter along the Z axis which hopefully points towards the front for all tools..
+	--       This helps with detecting stuff below the forks earlier
+	local x, y, z = localToWorld(node, 0, 0, .5)
 	-- Raycast downwards 10m from the tool's origin (we need to be this high because of telehandlers)
 	local maxDistance = 10
-	raycastAll(x, y, z, 0, -1, 0, maxDistance, "raycastCallback", raycastParams, CollisionFlag.TERRAIN + CollisionFlag.STATIC_OBJECT + CollisionFlag.VEHICLE + CollisionFlag.DYNAMIC_OBJECT)
+	raycastAll(x, y , z, 0, -1, 0, maxDistance, "raycastCallback", raycastParams, CollisionFlag.TERRAIN + CollisionFlag.STATIC_OBJECT + CollisionFlag.VEHICLE + CollisionFlag.DYNAMIC_OBJECT)
 	return ToolStateAnalyzer.getAdjustedGroundDistance(tool, raycastParams.groundDistance)
 end
 
