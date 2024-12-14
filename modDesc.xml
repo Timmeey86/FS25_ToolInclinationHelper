@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="93">
 	<author>Farmsim Tim (timmeey86)</author>
-	<version>0.4.0.0</version>
+	<version>0.5.0.0</version>
 	<title>
 		<en>Tool Inclination Helper</en>
 		<de>Werkzeugneigungshelfer</de>
@@ -10,6 +10,7 @@
 	<description>
 		<en><![CDATA[
 Description: This mod displays whether or not your forks (or other implements) are level (= horizontal orientation) or not.
+Additionally, it displays the distance of the tool to the ground or to whatever is below it (bales, pallets, trailer, ...).
 
 You can choose between icons or degrees in the settings, you can turn on or off color coding if set to "degrees", and you can move the display around, if needed.
 
@@ -22,6 +23,7 @@ GitHub link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 ]]></en>
 		<de><![CDATA[
 Beschreibung: Diese Mod zeigt an, ob deine Gabeln (oder andere Geräte) horizontal ausgerichtet sind oder nicht.
+Zustätzlich wird der Abstand des Geräts zum Boden oder zu eventuellen Objekten unter dem Gerät (Ballen, Paletten, Anhänger, ...) angezeigt.
 
 Du kannst in den Einstellungen zwischen Symbolen und Gradzahlen wählen, Einfärbung der Gradzahlen an- oder ausschalten, oder die Anzeige verschieben, falls nötig.
 
@@ -44,6 +46,7 @@ GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 		<sourceFile filename="scripts/settings/TIHSettingsRepository.lua" />
 		<sourceFile filename="scripts/settings/TIHSettingsUI.lua" />
 		<sourceFile filename="scripts/ToolFinder.lua" />
+		<sourceFile filename="scripts/ToolStateAnalyzer.lua" />
 		<sourceFile filename="scripts/ToolInclinationHUD.lua" />
 		<sourceFile filename="scripts/ToolInclinationHelper.lua" />
 	</extraSourceFiles>
