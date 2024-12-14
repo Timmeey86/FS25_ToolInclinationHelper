@@ -32,8 +32,8 @@ function TIHSettingsUI:injectUiSettings()
 
 	-- Define the UI controls. For each control, a <prefix>_<name>_short and _long key must exist in the i18n values
 	local controlProperties = {
-		{ name = "xOffset", min = -100, max = 100, step = 1, autoBind = true, subTable = "baseLocation", propName="xOffset" },
-		{ name = "yOffset", min = -100, max = 100, step = 1, autoBind = true, subTable = "baseLocation", propName="yOffset" },
+		{ name = "xOffset", min = -1600, max = 400, step = 10, autoBind = true, subTable = "baseLocation", propName="xOffset" },
+		{ name = "yOffset", min = -100, max = 1000, step = 10, autoBind = true, subTable = "baseLocation", propName="yOffset" },
 		{ name = "displayMode", values = TIHSettingsUI.I18N.DISPLAY_MODES, autoBind = true },
 		{ name = "invertArrows", autoBind = true },
 		{ name = "colorCoding", autoBind = true }

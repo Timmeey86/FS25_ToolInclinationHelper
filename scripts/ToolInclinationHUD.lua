@@ -28,9 +28,9 @@ ToolInclinationHUD = {
 	-- Define the dimensions of things in the .dds file (x/y/width/height)
 	UV_DIMENSIONS = {
 		BG = { 0, 0, 32, 32 },
-		LINE =  { 32, 25, 24, 3},
-		UPARROW = { 32, 0, 24, 24 },
-		DOWNARROW = { 56, 0, 24, 24 }
+		LINE =  { 33, 25, 24, 3},
+		UPARROW = { 33, 0, 24, 24 },
+		DOWNARROW = { 57, 0, 24, 24 }
 	},
 	-- Define colors of things
 	COLORS = {
