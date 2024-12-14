@@ -18,11 +18,12 @@ ToolInclinationHUD = {
 	-- Define positions of things relative to the reference point
 	POSITIONS = {
 		BG = { 0, 0 },
+		INCLINATION_TEXT = { 16, 18 }, -- relative to BG
 		LINE = { 4, 14 },
 		UPARROW = { 7, 8 },
 		DOWNARROW = { 7, 6 },
 		DISTANCE_BG = { -35, 0 },
-		DISTANCE_TEXT = { 16, 16 } -- relative to DISTANCE_BG
+		DISTANCE_TEXT = { 16, 18 } -- relative to DISTANCE_BG
 	},
 	-- Define the dimensions of things in the .dds file (x/y/width/height)
 	UV_DIMENSIONS = {
@@ -33,9 +34,10 @@ ToolInclinationHUD = {
 	},
 	-- Define colors of things
 	COLORS = {
-		BG = { 0, 0, 0, 0.5 },
-		LINE = { .2, 1.0, .2, 1.0 },
-		ARROWS = { 1.0, 0.5, .0, 1.0 },
+		BG = { 0, 0, 0, 0.8 },
+		LEVEL = { .0, 1, .0, 1.0 },
+		UPWARDS = { .1, .1, .4, 1.0 },
+		DOWNWARDS = { .4, .1, .1, 1.0 },
 		TEXT = { 1.0, 1.0, 1.0, 1.0}
 	}
 }
@@ -86,7 +88,7 @@ function ToolInclinationHUD:load()
 		ToolInclinationHUD.POSITIONS.LINE,
 		ToolInclinationHUD.OVERLAY_SIZES.LINE,
 		ToolInclinationHUD.UV_DIMENSIONS.LINE,
-		ToolInclinationHUD.COLORS.LINE)
+		ToolInclinationHUD.COLORS.LEVEL)
 	self.iconBox:addChild(self.lineElement)
 
 	-- Create an icon to represent the "tilted downwards" condition
@@ -94,7 +96,7 @@ function ToolInclinationHUD:load()
 		ToolInclinationHUD.POSITIONS.DOWNARROW,
 		ToolInclinationHUD.OVERLAY_SIZES.ARROWS,
 		ToolInclinationHUD.UV_DIMENSIONS.DOWNARROW,
-		ToolInclinationHUD.COLORS.ARROWS)
+		ToolInclinationHUD.COLORS.UPWARDS)
 	self.iconBox:addChild(self.downArrowElement)
 
 	-- Create an icon to represent the "tilted upwards" condition
@@ -102,7 +104,7 @@ function ToolInclinationHUD:load()
 		ToolInclinationHUD.POSITIONS.UPARROW,
 		ToolInclinationHUD.OVERLAY_SIZES.ARROWS,
 		ToolInclinationHUD.UV_DIMENSIONS.UPARROW,
-		ToolInclinationHUD.COLORS.ARROWS)
+		ToolInclinationHUD.COLORS.DOWNWARDS)
 	self.iconBox:addChild(self.upArrowElement)
 
 	self.lineElement:setVisible(false)
@@ -116,12 +118,13 @@ function ToolInclinationHUD:load()
 		ToolInclinationHUD.OVERLAY_SIZES.BG,
 		ToolInclinationHUD.UV_DIMENSIONS.BG,
 		ToolInclinationHUD.COLORS.BG)
-	local x, y = self.speedMeter:scalePixelValuesToScreenVector(table.unpack(ToolInclinationHUD.POSITIONS.DISTANCE_BG))
 	self.distanceText =  {
-		x = x,
-		y = y,
 		text = "-",
-		size = self.speedMeter:scalePixelToScreenHeight(12)
+		size = self.speedMeter:scalePixelToScreenWidth(20)
+	}
+	self.inclinationText = {
+		text = "",
+		size = self.speedMeter:scalePixelToScreenWidth(30)
 	}
 
 	self.distanceBox:setVisible(false)
@@ -135,37 +138,81 @@ function ToolInclinationHUD:setScaledPos(element, relativePixelPos)
 end
 
 function ToolInclinationHUD:drawHUD()
-	if self.iconBox ~= nil then
-		self:setScaledPos(self.iconBox, ToolInclinationHUD.POSITIONS.BG)
-		self:setScaledPos(self.distanceBox, ToolInclinationHUD.POSITIONS.DISTANCE_BG)
-	end
-	self.iconBox.overlay:render()
-	self.downArrowElement.overlay:render()
-	self.upArrowElement.overlay:render()
-	self.lineElement.overlay:render()
 
-	self.distanceBox.overlay:render()
+	setTextAlignment(RenderText.ALIGN_CENTER)
+	setTextVerticalAlignment(RenderText.VERTICAL_ALIGN_MIDDLE)
+
+	if self.iconBox.overlay:getIsVisible() then
+		self:setScaledPos(self.iconBox, ToolInclinationHUD.POSITIONS.BG)
+		self.iconBox.overlay:render()
+
+		if ToolInclinationHelper.settings:numbersShallBeDisplayed() then
+			if ToolInclinationHelper.settings.colorCoding then
+				if self.inclinationText.inclination < -1 then
+					setTextColor(table.unpack(ToolInclinationHUD.COLORS.DOWNWARDS))
+				elseif self.inclinationText.inclination > 1 then
+					setTextColor(table.unpack(ToolInclinationHUD.COLORS.UPWARDS))
+				else
+					setTextColor(table.unpack(ToolInclinationHUD.COLORS.LEVEL))
+				end
+			else
+				setTextColor(table.unpack(ToolInclinationHUD.COLORS.TEXT))
+			end
+			local xPixel, yPixel =
+				ToolInclinationHUD.POSITIONS.BG[1] + ToolInclinationHUD.POSITIONS.INCLINATION_TEXT[1],
+				ToolInclinationHUD.POSITIONS.BG[2] + ToolInclinationHUD.POSITIONS.INCLINATION_TEXT[2]
+			local xRel, yRel = self.speedMeter:scalePixelValuesToScreenVector(xPixel, yPixel)
+			local baseX, baseY = ToolInclinationHelper.settings:getRelativeBaseLocation(self.speedMeter)
+			renderText(baseX + xRel, baseY + yRel, self.inclinationText.size, self.inclinationText.text)
+		else
+			self.downArrowElement.overlay:render()
+			self.upArrowElement.overlay:render()
+			self.lineElement.overlay:render()
+		end
+	end
+
 
 	if self.distanceBox.overlay:getIsVisible() then
+		self:setScaledPos(self.distanceBox, ToolInclinationHUD.POSITIONS.DISTANCE_BG)
+		self.distanceBox.overlay:render()
+
 		-- Center the text in the distance box
-		setTextAlignment(RenderText.ALIGN_CENTER)
-		setTextVerticalAlignment(RenderText.VERTICAL_ALIGN_MIDDLE)
 		setTextColor(table.unpack(ToolInclinationHUD.COLORS.TEXT))
-		local xPixelRel, yPixelRel = 
+		local xPixel, yPixel = 
 			ToolInclinationHUD.POSITIONS.DISTANCE_BG[1] + ToolInclinationHUD.POSITIONS.DISTANCE_TEXT[1],
 			ToolInclinationHUD.POSITIONS.DISTANCE_BG[2] + ToolInclinationHUD.POSITIONS.DISTANCE_TEXT[2]
-		local xRel, yRel = self.speedMeter:scalePixelValuesToScreenVector(xPixelRel, yPixelRel)
+		local xRel, yRel = self.speedMeter:scalePixelValuesToScreenVector(xPixel, yPixel)
 		local baseX, baseY = ToolInclinationHelper.settings:getRelativeBaseLocation(self.speedMeter)
-		renderText(baseX + xRel, baseY + yRel, self.distanceText.size * self.speedMeter.uiScale, self.distanceText.text)
+		renderText(baseX + xRel, baseY + yRel, self.distanceText.size, self.distanceText.text)
 	end
 end
 
-function ToolInclinationHUD:setState(isVisible, direction, distanceToGround)
+function ToolInclinationHUD:setState(isVisible, inclination, distanceToGround)
 	self.iconBox:setVisible(isVisible)
-	self.lineElement:setVisible(isVisible and direction == 0)
-	self.upArrowElement:setVisible(isVisible and direction > 0)
-	self.downArrowElement:setVisible(isVisible and direction < 0)
+
+	local iconsShallBeDisplayed = ToolInclinationHelper.settings:iconsShallBeDisplayed()
+	-- Figure out which icon to display
+	local displayLine, displayUpArrow, displayDownArrow = false, false, false
+	if isVisible and iconsShallBeDisplayed then
+		if inclination <= -1 then
+			displayDownArrow = ToolInclinationHelper.settings.invertArrows
+			displayUpArrow = not displayDownArrow
+		elseif inclination >= 1 then
+			displayUpArrow = ToolInclinationHelper.settings.invertArrows
+			displayDownArrow = not displayUpArrow
+		else
+			displayLine = true
+		end
+	-- else: not visible, or numbers are displayed instead of icons
+	end
+
+	self.lineElement:setVisible(displayLine)
+	self.upArrowElement:setVisible(displayUpArrow)
+	self.downArrowElement:setVisible(displayDownArrow)
+
 	self.distanceBox:setVisible(isVisible)
 
 	self.distanceText.text = ("%.1f %s"):format(distanceToGround or 0, g_i18n:getText("unit_mShort"))
+	self.inclinationText.text = ("%d"):format(inclination and math.abs(inclination) or 0)
+	self.inclinationText.inclination = inclination
 end

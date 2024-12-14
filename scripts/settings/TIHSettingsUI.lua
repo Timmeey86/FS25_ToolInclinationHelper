@@ -3,9 +3,15 @@
 ---@field settings TIHSettings @The settings object
 ---@field controls table @A list of all UI controls
 ---@field sectionTitle table @The UI header for the settings
----@field baseX table @The UI control for the X coordinate
----@field baseY table @The UI control for the Y coordinate
+---@field xOffset table @The UI control for the X offset
+---@field yOffset table @The UI control for the Y offset
+---@field displayMode table @The UI control for the display mode
+---@field invertArrows table @The UI control for the arrow inversion setting
+---@field colorCoding table @The UI control for the number color coding setting
 TIHSettingsUI = {
+	I18N = {
+		DISPLAY_MODES = { "tih_displayMode_icons", "tih_displayMode_numbers" }
+	}
 }
 local TIHSettingsUI_mt = Class(TIHSettingsUI)
 
@@ -26,8 +32,11 @@ function TIHSettingsUI:injectUiSettings()
 
 	-- Define the UI controls. For each control, a <prefix>_<name>_short and _long key must exist in the i18n values
 	local controlProperties = {
-		{ name = "baseX", min = 0, max = 1920, step = 10, autoBind = true, subTable = "baseLocation", propName="x" },
-		{ name = "baseY", min = 0, max = 1080, step = 10, autoBind = true, subTable = "baseLocation", propName="y" }
+		{ name = "xOffset", min = -100, max = 100, step = 1, autoBind = true, subTable = "baseLocation", propName="xOffset" },
+		{ name = "yOffset", min = -100, max = 100, step = 1, autoBind = true, subTable = "baseLocation", propName="yOffset" },
+		{ name = "displayMode", values = TIHSettingsUI.I18N.DISPLAY_MODES, autoBind = true },
+		{ name = "invertArrows", autoBind = true },
+		{ name = "colorCoding", autoBind = true }
 	}
 	UIHelper.createControlsDynamically(settingsPage, "tih_section_title", self, controlProperties, "tih_")
 	UIHelper.setupAutoBindControls(self, self.settings, TIHSettingsUI.onSettingsChange)

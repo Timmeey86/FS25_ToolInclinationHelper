@@ -3,9 +3,17 @@
 	<translationContributors/>
 	<texts>
 		<text name="tih_section_title" text="Werkzeugneigungshelfer" />
-		<text name="tih_baseX_short" text="Referenz-X-Koordinate für die Anzeige" />
-		<text name="tih_baseX_long" text="Erhöhe den Wert, um die Anzeige nach rechts zu verschieben oder verringere den Wert, um sie nach links zu verschieben." />
-		<text name="tih_baseY_short" text="Referenz-Y-Koordinate für die Anzeige" />
-		<text name="tih_baseY_long" text="Erhöhe den Wert, um die Anzeige weiter hoch zu schieben oder verringere ihn, um sie nach unten zu verschieben." />
+		<text name="tih_xOffset_short" text="X-Verschiebung der Anzeige" />
+		<text name="tih_xOffset_long" text="Erhöhe den Wert, um die Anzeige nach rechts zu verschieben oder verringere den Wert, um sie nach links zu verschieben." />
+		<text name="tih_yOffset_short" text="Y-Verschiebung der Anzeige" />
+		<text name="tih_yOffset_long" text="Erhöhe den Wert, um die Anzeige weiter hoch zu schieben oder verringere ihn, um sie nach unten zu verschieben." />
+		<text name="tih_displayMode_short" text="Anzeigemodus" />
+		<text name="tih_displayMode_long" text="Wechselt die Anzeige des Neigungswinkels zwischen Symbolen und Gradzahlen." />
+		<text name="tih_displayMode_icons" text="Symbole" />
+		<text name="tih_displayMode_numbers" text="Gradzahlen" />
+		<text name="tih_invertArrows_short" text="Pfeile invertieren" />
+		<text name="tih_invertArrows_long" text="Wenn aktiviert, bedeutet ein Pfeil nach oben, dass du die Spitze der Gabeln höher bringen musst, um eine horizontale Position zu erreichen. Andernfalls bedeutet es, dass die Spitze der Gabeln momentan höher ist als bei der horizontalen Position." />
+		<text name="tih_colorCoding_short" text="Einfärbung" />
+		<text name="tih_colorCoding_long" text="Wenn aktiviert, werden die Zahlen für den Neigungswinkel eingefärbt." />
 	</texts>
 </l10n>

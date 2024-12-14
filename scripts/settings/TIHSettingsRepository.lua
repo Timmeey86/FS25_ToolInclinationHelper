@@ -4,8 +4,11 @@ TIHSettingsRepository = {
 	FILENAME = "ToolInclinationHelperSettings.xml",
 	MAIN_KEY = "ToolInclinationHelper",
 	BASE_LOCATION = "baseLocation",
-	X_KEY = "x",
-	Y_KEY = "y"
+	XOFFSET_KEY = "xOffset",
+	YOFFSET_KEY = "yOffset",
+	DISPLAY_MODE = "displayMode",
+	COLOR_CODING = "colorCoding",
+	INVERT_ARROWS = "invertArrows"
 }
 
 ---Writes the settings to our own XML file
@@ -18,12 +21,15 @@ function TIHSettingsRepository.storeSettings(settings)
 	end
 
 	-- Create an empty XML file in memory
-	local xmlFileId = createXMLFile("UnloadBalesEarly", xmlPath, TIHSettingsRepository.MAIN_KEY)
+	local xmlFileId = createXMLFile("ToolInclinationHelper", xmlPath, TIHSettingsRepository.MAIN_KEY)
 
 	-- Add XML data in memory
 	local baseLocationProperty = TIHSettingsRepository.getXMLSubPath(TIHSettingsRepository.BASE_LOCATION)
-	setXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.X_KEY, baseLocationProperty), settings.baseLocation.x or 0)
-	setXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.Y_KEY, baseLocationProperty), settings.baseLocation.y or 0)
+	setXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.XOFFSET_KEY, baseLocationProperty), settings.baseLocation.xOffset)
+	setXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.YOFFSET_KEY, baseLocationProperty), settings.baseLocation.yOffset)
+	setXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.DISPLAY_MODE), settings.displayMode)
+	setXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.COLOR_CODING), settings.colorCoding)
+	setXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.INVERT_ARROWS), settings.invertArrows)
 
 	-- Write the XML file to disk
 	saveXMLFile(xmlFileId)
@@ -54,8 +60,11 @@ function TIHSettingsRepository.restoreSettings(settings)
 
 	-- Read the values from memory
 	local baseLocationProperty = TIHSettingsRepository.getXMLSubPath(TIHSettingsRepository.BASE_LOCATION)
-	settings.baseLocation.x = getXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.X_KEY, baseLocationProperty)) or settings.baseLocation.x
-	settings.baseLocation.y = getXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.Y_KEY, baseLocationProperty)) or settings.baseLocation.y
+	settings.baseLocation.xOffset = getXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.XOFFSET_KEY, baseLocationProperty)) or settings.baseLocation.xOffset
+	settings.baseLocation.yOffset = getXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.YOFFSET_KEY, baseLocationProperty)) or settings.baseLocation.yOffset
+	settings.displayMode = getXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.DISPLAY_MODE)) or settings.displayMode
+	settings.colorCoding = getXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.COLOR_CODING)) or settings.colorCoding
+	settings.invertArrows = getXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.INVERT_ARROWS)) or settings.invertArrows
 	print(MOD_NAME .. ": Successfully restored settings")
 end
 

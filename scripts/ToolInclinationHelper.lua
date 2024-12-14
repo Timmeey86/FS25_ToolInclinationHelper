@@ -20,15 +20,15 @@ Mission00.loadMission00Finished = Utils.appendedFunction(Mission00.loadMission00
 
 	-- Initialize the UI
 	local ui = TIHSettingsUI.new(ToolInclinationHelper.settings)
-	--ui:injectUiSettings()
+	ui:injectUiSettings()
 
 	-- Draw our icon when the base game HUD is drawn.
 	-- Note that overwriting HUD.drawControlledEntityHUD at this point in time seems to be too late, so we overwrite the function in the instance instead.
 	g_currentMission.hud.drawControlledEntityHUD = Utils.appendedFunction(g_currentMission.hud.drawControlledEntityHUD, function(self)
 		if self.isVisible then
-			local isVisible, direction, tool = ToolInclinationHelper.getCurrentToolInclination(self.controlledVehicle)
+			local isVisible, inclination, tool = ToolInclinationHelper.getCurrentToolInclination(self.controlledVehicle)
 			local distanceToGround = ToolInclinationHelper.getDistanceFromGround(self.controlledVehicle, tool)
-			ToolInclinationHelper.hud:setState(isVisible, direction, distanceToGround)
+			ToolInclinationHelper.hud:setState(isVisible, inclination, distanceToGround)
 			ToolInclinationHelper.hud:drawHUD()
 		end
 	end)
@@ -37,7 +37,7 @@ end)
 ---Retrieves the inclination for the current tool
 ---@param vehicle Vehicle @The current vehicle
 ---@return boolean @True if a valid inclination was found
----@return number @The direction of the inclination (1, 0, or -1)
+---@return number @The inclination
 ---@return table @The tool or component which was found
 function ToolInclinationHelper.getCurrentToolInclination(vehicle)
 	if not g_localPlayer or vehicle ~= g_localPlayer:getCurrentVehicle() or not g_currentMission then
@@ -58,13 +58,7 @@ function ToolInclinationHelper.getCurrentToolInclination(vehicle)
 	local pitch, _ = MathUtil.directionToPitchYaw(xx - x, xy - y, xz - z)
 	pitch = math.deg(pitch)
 
-	local direction = 0
-	if pitch > 1 then
-		direction = 1
-	elseif pitch < -1 then
-		direction = -1
-	end
-	return true, direction, tool
+	return true, pitch, tool
 end
 
 ---Tries finding out how much the tool is above the ground

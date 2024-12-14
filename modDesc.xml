@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="93">
 	<author>Farmsim Tim (timmeey86)</author>
-	<version>0.3.0.0</version>
+	<version>0.4.0.0</version>
 	<title>
 		<en>Tool Inclination Helper</en>
 		<de>Werkzeugneigungshelfer</de>
@@ -11,9 +11,7 @@
 		<en><![CDATA[
 Description: This mod displays whether or not your forks (or other implements) are level (= horizontal orientation) or not.
 
-If the tool is tilted down too much, an upwards arrow will appear, if it is tilted up too much, a downwards arrow will appear.
-
-The icon is displayed in at the bottom-left of the speed dial and can currently not be moved.
+You can choose between icons or degrees in the settings, you can turn on or off color coding if set to "degrees", and you can move the display around, if needed.
 
 The mod works for at least any base game front loader tool, wheel loader tool, telehandler tool, skid steer tool and forklift.
 Note that the "level" orientation depends on how the tool was designed.
@@ -23,11 +21,9 @@ Hotkeys: None yet
 GitHub link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 ]]></en>
 		<de><![CDATA[
-Beschreibung: Diese Mod zeigt an, ob deine Gabeln (oder andere Geräte) eben sind (also horizontal ausgerichtet) oder nicht.
+Beschreibung: Diese Mod zeigt an, ob deine Gabeln (oder andere Geräte) horizontal ausgerichtet sind oder nicht.
 
-Wenn das Gerät zu weit nach unten geneigt ist, erscheint ein Pfeil nach oben, wenn es zu weit nach oben geneigt ist, erscheint ein Pfeil nach unten.
-
-Das Symbol wird links unterhalb des Tachos angezeigt und kann momentan nicht verschoben werden.
+Du kannst in den Einstellungen zwischen Symbolen und Gradzahlen wählen, Einfärbung der Gradzahlen an- oder ausschalten, oder die Anzeige verschieben, falls nötig.
 
 Der Mod funktioniert mindestens für alle Frontladergeräte, Radladergeräte, Teleskopladergeräte, Kompaktladergeräte und Gabelstapler aus dem Basisspiel.
 Beachte, dass die "ebene" Ausrichtung davon abhängt, wie das Geräte vom Designer eingestellt wurde.

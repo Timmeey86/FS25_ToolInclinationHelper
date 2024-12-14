@@ -1,7 +1,9 @@
 ---This class allows easier creation of configuration options in the general settings page.
 ---Originally created by Farmsim Tim based on discoveries made by Shad0wlife
 ---Feel free to use this class in your own mods. You may change anything except for the first three lines of this file.
----version 1.0
+---version 1.1
+---Changelog:
+---v1.1: Fixed choice controls when using string values
 ---@class UIHelper
 UIHelper = {}
 
@@ -97,9 +99,11 @@ function UIHelper.createChoiceElement(generalSettingsPage, id, i18nTextId, i18nV
 			value = tostring(valueEntry)
 		elseif type(valueEntry) == "string" then
 			value = g_i18n:getText(valueEntry)
+			choiceElementBox.hasStrings = true
 		else
 			-- legacy syntax
 			value = g_i18n:getText(valueEntry.i18nTextId)
+			choiceElementBox.hasStrings = true
 		end
 		table.insert(texts, value)
 	end
@@ -314,11 +318,16 @@ end
 
 ---Sets a choice control to the given value. The method will find the appropriate index for the value automatically.
 ---@param control table @The UI control
----@param value number @The value which shall be displayed to the user
+---@param value number @The value which shall be displayed to the user, except for enums, where this is the index
 function UIHelper.setChoiceValue(control, value)
-	for index, val in control.values do
-		if val == value then
-			control.elements[1]:setState(index)
+	if control.hasStrings then
+		control.elements[1]:setState(value)
+	else
+		-- Find the index of the value which is being used
+		for index, val in control.values do
+			if val == value then
+				control.elements[1]:setState(index)
+			end
 		end
 	end
 end
@@ -326,9 +335,13 @@ end
 ---Retrieves the current value of a UI choice control.
 ---@param control table @The UI control
 ---@param controlState number @The currently selected index
----@return number|nil @The value which was selected by the user (rather than the index)
+---@return number|nil @The value which was selected by the user (rather than the index, except for enums, where this will be the index)
 function UIHelper.getChoiceValue(control, controlState)
-	return control.values[controlState]
+	if control.hasStrings then
+		return controlState
+	else
+		return control.values[controlState]
+	end
 end
 
 ---Sets the current value for a UI yes/no control.

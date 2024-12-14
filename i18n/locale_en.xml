@@ -3,9 +3,17 @@
 	<translationContributors/>
 	<texts>
 		<text name="tih_section_title" text="Tool Inclination Helper" />
-		<text name="tih_baseX_short" text="Overlay X reference coordinate" />
-		<text name="tih_baseX_long" text="Increase this in order to move the overlay to the right, decrease it in order to move to the left." />
-		<text name="tih_baseY_short" text="Overlay Y reference coordinate" />
-		<text name="tih_baseY_long" text="Increase this in order to move the overlay upwards, decrease it in order to move it downwards." />
+		<text name="tih_xOffset_short" text="Overlay X offset" />
+		<text name="tih_xOffset_long" text="Increase this in order to move the overlay to the right, decrease it in order to move to the left." />
+		<text name="tih_yOffset_short" text="Overlay Y offset" />
+		<text name="tih_yOffset_long" text="Increase this in order to move the overlay upwards, decrease it in order to move it downwards." />
+		<text name="tih_displayMode_short" text="Display mode" />
+		<text name="tih_displayMode_long" text="Switches the inclination indicator between icons and degrees." />
+		<text name="tih_displayMode_icons" text="Icons" />
+		<text name="tih_displayMode_numbers" text="Degrees" />
+		<text name="tih_invertArrows_short" text="Invert arrows" />
+		<text name="tih_invertArrows_long" text="When activated, an upwards arrow means you need to move the tips of your forks up to be level. Otherwise, it means the tips of your forks are currently above the level position." />
+		<text name="tih_colorCoding_short" text="Color coding" />
+		<text name="tih_colorCoding_long" text="When activated, the inclination indicator will be colored when displaying numbers." />
 	</texts>
 </l10n>
