@@ -1,9 +1,10 @@
 ---This class allows easier creation of configuration options in the general settings page.
 ---Originally created by Farmsim Tim based on discoveries made by Shad0wlife
 ---Feel free to use this class in your own mods. You may change anything except for the first three lines of this file.
----version 1.1
+---version 1.2
 ---Changelog:
 ---v1.1: Fixed choice controls when using string values
+---v1.2: Chioce controls can now be nillable, too
 ---@class UIHelper
 UIHelper = {}
 
@@ -87,12 +88,17 @@ end
 ---@param i18nValueMap          table       @An map of values containing translation IDs for the possible values
 ---@param target                table       @The object which contains the callback func
 ---@param callbackFunc          string      @The name of the function to call when the value changes
+---@param nillable              string      @If set to true, the first entry will mean the setting has no effect. The text value will be "-".
 ---@return                      table       @The created object
-function UIHelper.createChoiceElement(generalSettingsPage, id, i18nTextId, i18nValueMap, target, callbackFunc)
+function UIHelper.createChoiceElement(generalSettingsPage, id, i18nTextId, i18nValueMap, target, callbackFunc, nillable)
 	local choiceElementBox = createElement(generalSettingsPage, generalSettingsPage.multiVolumeVoiceBox, id, i18nTextId, target, callbackFunc)
 
 	local choiceElement = choiceElementBox.elements[1]
 	local texts = {}
+
+	if nillable then
+		table.insert(texts, "-")
+	end
 	for _, valueEntry in pairs(i18nValueMap) do
 		local value
 		if type(valueEntry) == "number" then
@@ -186,8 +192,9 @@ function UIHelper.createControlsDynamically(settingsPage, sectionTitle, owningTa
 
 		elseif controlProps.values ~= nil then
 			-- enum control
-			uiControl = UIHelper.createChoiceElement(settingsPage, id, id, controlProps.values, owningTable, callback)
+			uiControl = UIHelper.createChoiceElement(settingsPage, id, id, controlProps.values, owningTable, callback, controlProps.nillable)
 			uiControl.values = controlProps.values -- for mapping values later on, if necessary
+			uiControl.nillable = controlProps.nillable
 		else
 			-- bool switch
 			uiControl = UIHelper.createBoolElement(settingsPage, id, id, owningTable, callback)
@@ -251,7 +258,7 @@ function UIHelper.setupAutoBindControls(owningTable, targetTable, updateFunc)
 				local newValue = UIHelper.getControlValue(control, newState)
 				UIHelper.setAutoBoundValueInTable(control, newValue, targetTable)
 				if updateFunc then
-					updateFunc(owningTable)
+					updateFunc(owningTable, control)
 				end
 			end
 			-- Update the callback
