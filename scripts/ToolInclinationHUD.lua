@@ -139,8 +139,10 @@ end
 
 function ToolInclinationHUD:drawHUD()
 
+	-- We center our texts and specify the desired middle as the position. That way, the engine will perfectly center the text within the background circles
 	setTextAlignment(RenderText.ALIGN_CENTER)
 	setTextVerticalAlignment(RenderText.VERTICAL_ALIGN_MIDDLE)
+	setTextBold(false)
 
 	if self.iconBox.overlay:getIsVisible() then
 		self:setScaledPos(self.iconBox, ToolInclinationHUD.POSITIONS.BG)
@@ -185,6 +187,12 @@ function ToolInclinationHUD:drawHUD()
 		local baseX, baseY = ToolInclinationHelper.settings:getRelativeBaseLocation(self.speedMeter)
 		renderText(baseX + xRel, baseY + yRel, self.distanceText.size, self.distanceText.text)
 	end
+
+	-- Reset to default values so mods which don't explicilty set these four attributes don't get influenced by our mod
+	setTextColor(1,1,1,1)
+	setTextAlignment(RenderText.ALIGN_LEFT)
+	setTextVerticalAlignment(RenderText.VERTICAL_ALIGN_BASELINE)
+	setTextBold(false)
 end
 
 function ToolInclinationHUD:setState(isVisible, inclination, distanceToGround)
