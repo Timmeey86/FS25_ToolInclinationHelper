@@ -15,8 +15,6 @@ function ToolFinder.findSupportedTool(vehicle)
 
 	-- Special case: Forklifts: The forks are a component rather than an attached implement
 	if category == "forklifts" then
-		-- TODO: This works for both basegame forklifts but will likely not support modded forklifts.
-		-- Maybe we can loop through the components and see which ones are affected by joystick movements or something
 		local forkComponent = ToolFinder.findForkliftForks(vehicle)
 		if forkComponent then
 			return forkComponent
@@ -74,12 +72,13 @@ function ToolFinder.findForkliftForks(vehicle)
 				print(MOD_NAME .. ": Found forks in component # " .. tostring(index))
 				vehicle.forkComponentIndex = index
 				local translation = i3dAsXml:getVector(shapeXmlPath .. "#translation")
+				local forkComponent = vehicle.components[vehicle.forkComponentIndex]
 				-- Note: The fork component might be configurable, like in the JCB teletruk
-				if translation and vehicle.components[vehicle.forkComponentIndex] ~= nil then
-					vehicle.components[vehicle.forkComponentIndex].forkYOffset = translation[2]
+				if translation and forkComponent ~= nil then
+					forkComponent.yOffset = translation[2]
 					print(MOD_NAME .. ": Found Y offset " .. tostring(translation[2]))
+					return -- stop searching
 				end
-				return -- stop searching
 			end
 		end)
 	end

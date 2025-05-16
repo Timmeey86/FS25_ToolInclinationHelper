@@ -220,7 +220,7 @@ function ToolInclinationHUD:setState(isVisible, inclination, distanceToGround)
 
 	self.distanceBox:setVisible(isVisible)
 
-	self.distanceText.text = ("%.1f %s"):format(distanceToGround or 0, g_i18n:getText("unit_mShort"))
+	self.distanceText.text = ("%s %s"):format(distanceToGround and ("%.1f"):format(distanceToGround) or "-", g_i18n:getText("unit_mShort"))
 	self.inclinationText.text = ("%d"):format(inclination and math.abs(inclination) or 0)
 	self.inclinationText.inclination = inclination
 end

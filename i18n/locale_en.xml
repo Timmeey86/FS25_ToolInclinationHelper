@@ -15,5 +15,6 @@
 		<text name="tih_invertArrows_long" text="When activated, an upwards arrow means you need to move the tips of your forks up to be level. Otherwise, it means the tips of your forks are currently above the level position." />
 		<text name="tih_colorCoding_short" text="Color coding" />
 		<text name="tih_colorCoding_long" text="When activated, the inclination indicator will be colored when displaying numbers." />
+		<text name="input_SET_TOOL_INCLINATION_REFERENCE" text="Set reference orientation" />
 	</texts>
 </l10n>

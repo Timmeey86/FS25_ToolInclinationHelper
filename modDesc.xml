@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="94">
 	<author>Farmsim Tim (timmeey86)</author>
-	<version>0.5.3.1</version>
+	<version>1.0.0.1</version>
 	<title>
 		<en>Tool Inclination Helper</en>
 		<de>Werkzeugneigungshelfer</de>
@@ -15,11 +15,19 @@ Additionally, it displays the distance of the tool to the ground or to whatever 
 You can choose between icons or degrees in the settings, you can turn on or off color coding if set to "degrees", and you can move the display around, if needed.
 
 The mod works for at least any base game front loader tool, wheel loader tool, telehandler tool, skid steer tool and forklift.
-Note that the "level" orientation depends on how the tool was designed.
+Note that the default "level" orientation and distance to ground depend on how the tool was designed.
+If you want to change the default orientation and/or distance to ground, you can move the tool to the desired position and orientation and press [Ctrl] [Shift] [R] to treat the current position to 0° and 0m from ground. The display will then start showing the difference to this position/orientation.
 
-Hotkeys: None yet
+Hotkeys:
+- [Ctrl] [Shift] [R]: Stores the current position and orientation as a reference
 
 GitHub link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
+
+Changelog:
+v1.0.0.1:
+- Fixed an issue with saving settings
+- Fixed an issue where the JCB teletruk was not detected properly
+- Added possibility to set a reference orientation for the tool
 ]]></en>
 		<de><![CDATA[
 Beschreibung: Diese Mod zeigt an, ob deine Gabeln (oder andere Geräte) horizontal ausgerichtet sind oder nicht.
@@ -28,11 +36,19 @@ Zustätzlich wird der Abstand des Geräts zum Boden oder zu eventuellen Objekten
 Du kannst in den Einstellungen zwischen Symbolen und Gradzahlen wählen, Einfärbung der Gradzahlen an- oder ausschalten, oder die Anzeige verschieben, falls nötig.
 
 Der Mod funktioniert mindestens für alle Frontladergeräte, Radladergeräte, Teleskopladergeräte, Kompaktladergeräte und Gabelstapler aus dem Basisspiel.
-Beachte, dass die "ebene" Ausrichtung davon abhängt, wie das Geräte vom Designer eingestellt wurde.
+Beachte, dass die standardmäßige "ebene" Ausrichtung und der Abstand vom Boden davon abhängen, wie das Geräte vom Designer eingestellt wurde.
+Wenn du die standardmäßige Ausrichtung und/oder den Abstand vom Boden ändern möchtest, kannst du das Gerät in die gewünschte Position und Ausrichtung bringen und [Strg] [Umschalt] [R] drücken, um die aktuelle Position als 0° und 0m vom Boden zu speichern. Die Anzeige zeigt ab dann immer den Unterschied zu dieser Position/Ausrichtung an.
 
-Tastenkombinationen: Bisher noch keine
+Tastenkombinationen:
+- [Ctrl] [Shift] [R]: Speichert die aktuelle Position und Ausrichtung als Referenz
 
 GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
+
+Changelog:
+v1.0.0.1:
+- Problem mit dem Speichern der Einstellungen behoben
+- Porblem mit der Erkennung des JCB Teletruk behoben
+- Möglichkeit hinzugefügt, eine Referenzorientierung für das Gerät zu setzen
 ]]></de>
 	</description>
 	
@@ -48,8 +64,16 @@ GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 		<sourceFile filename="scripts/ToolFinder.lua" />
 		<sourceFile filename="scripts/ToolStateAnalyzer.lua" />
 		<sourceFile filename="scripts/ToolInclinationHUD.lua" />
+		<sourceFile filename="scripts/ToolReferenceOrientationHandler.lua" />
 		<sourceFile filename="scripts/ToolInclinationHelper.lua" />
 	</extraSourceFiles>
-
+	<actions>
+		<action name="SET_TOOL_INCLINATION_REFERENCE" category="VEHICLE" axis="HALF" />
+	</actions>
+	<inputBinding>
+		<actionBinding action="SET_TOOL_INCLINATION_REFERENCE">
+			<binding device="KB_MOUSE_DEFAULT" input="KEY_LCTRL KEY_LSHIFT KEY_R" />
+		</actionBinding>
+	</inputBinding>
 	<l10n filenamePrefix="i18n/locale" />
 </modDesc>
