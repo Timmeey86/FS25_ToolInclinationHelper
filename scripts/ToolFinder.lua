@@ -17,7 +17,11 @@ function ToolFinder.findSupportedTool(vehicle)
 	if category == "forklifts" then
 		-- TODO: This works for both basegame forklifts but will likely not support modded forklifts.
 		-- Maybe we can loop through the components and see which ones are affected by joystick movements or something
-		return ToolFinder.findForkliftForks(vehicle)
+		local forkComponent = ToolFinder.findForkliftForks(vehicle)
+		if forkComponent then
+			return forkComponent
+		end
+		-- Else: No fork components found. The forklift might actually be something else like a skid steer in disguise => Keep searching
 	end
 
 	-- Find the first attachment which is within the given tool categories
@@ -70,7 +74,8 @@ function ToolFinder.findForkliftForks(vehicle)
 				print(MOD_NAME .. ": Found forks in component # " .. tostring(index))
 				vehicle.forkComponentIndex = index
 				local translation = i3dAsXml:getVector(shapeXmlPath .. "#translation")
-				if translation then
+				-- Note: The fork component might be configurable, like in the JCB teletruk
+				if translation and vehicle.components[vehicle.forkComponentIndex] ~= nil then
 					vehicle.components[vehicle.forkComponentIndex].forkYOffset = translation[2]
 					print(MOD_NAME .. ": Found Y offset " .. tostring(translation[2]))
 				end
@@ -82,6 +87,5 @@ function ToolFinder.findForkliftForks(vehicle)
 	if vehicle.forkComponentIndex then
 		return vehicle.components[vehicle.forkComponentIndex]
 	end
-
 	return nil
 end

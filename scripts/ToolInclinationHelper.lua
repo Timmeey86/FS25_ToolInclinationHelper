@@ -10,7 +10,7 @@ TIHSettingsRepository.restoreSettings(ToolInclinationHelper.settings)
 Mission00.loadMission00Finished = Utils.appendedFunction(Mission00.loadMission00Finished, function()
 
 	-- Save settings when the savegame is being saved
-	FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, function()
+    ItemSystem.save = Utils.prependedFunction(ItemSystem.save, function()
 		TIHSettingsRepository.storeSettings(ToolInclinationHelper.settings)
 	end)
 
