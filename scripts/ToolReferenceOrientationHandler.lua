@@ -33,7 +33,8 @@ VehicleDebug.registerActionEvents = Utils.appendedFunction(VehicleDebug.register
 ---Updates action events based on the current vehicle and vehicle state
 ---@param vehicle Vehicle @The vehicle the player is sitting in
 function ToolReferenceOrientationHandler.updateActionEvents(vehicle)
-	if not toolReferenceOrientationHandler.actionEvent then
+	-- Exit when registering failed, or when we get a call for a different vehicle
+	if not toolReferenceOrientationHandler.actionEvent or vehicle == nil or vehicle ~= g_localPlayer:getCurrentVehicle() then
 		return
 	end
 	local tool = ToolFinder.findSupportedTool(vehicle)

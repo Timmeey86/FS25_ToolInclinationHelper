@@ -72,7 +72,7 @@ v1.0.0.1:
 	</actions>
 	<inputBinding>
 		<actionBinding action="SET_TOOL_INCLINATION_REFERENCE">
-			<binding device="KB_MOUSE_DEFAULT" input="KEY_LCTRL KEY_LSHIFT KEY_R" />
+			<binding device="KB_MOUSE_DEFAULT" input="KEY_lctrl KEY_lshift KEY_r" />
 		</actionBinding>
 	</inputBinding>
 	<l10n filenamePrefix="i18n/locale" />
