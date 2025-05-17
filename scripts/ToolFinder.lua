@@ -66,7 +66,7 @@ function ToolFinder.searchForSupportedToolIn(vehicle)
 				-- Tool found, return the tool
 				return implement.object
 			else
-				local furtherImplement = ToolFinder.findSupportedTool(implement.object)
+				local furtherImplement = ToolFinder.searchForSupportedToolIn(implement.object)
 				if furtherImplement then
 					-- This finds front loader attachments which are connected to separate front loader arms on tractors
 					return furtherImplement

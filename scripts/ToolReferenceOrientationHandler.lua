@@ -73,11 +73,6 @@ function ToolReferenceOrientationHandler:updateActionEvents(vehicle)
 	g_inputBinding:setActionEventActive(vehicle.toolInclinationReferenceActionEvent, tool and (tool.rootNode or tool.node))
 end
 
-Vehicle.draw = Utils.appendedFunction(Vehicle.draw, function(vehicle)
-	local x, y, z = localToWorld(vehicle.rootNode or vehicle.node, 0, 1, 0)
-	Utils.renderTextAtWorldPosition(x, y, z, tostring(vehicle.uniqueId), getCorrectTextSize(.02), 0, 1, 1, 1, 1)
-end)
-
 ---Builds an identifier which is unique for each buyable vehicle, but equal for multiple instance of it across different saves
 function ToolReferenceOrientationHandler.buildVehicleIdentifier(tool, vehicle)
 	local relevantVehicle

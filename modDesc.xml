@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="94">
 	<author>Farmsim Tim (timmeey86)</author>
-	<version>1.0.0.1</version>
+	<version>1.0.0.2</version>
 	<title>
 		<en>Tool Inclination Helper</en>
 		<de>Werkzeugneigungshelfer</de>
@@ -24,7 +24,7 @@ Hotkeys:
 GitHub link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 
 Changelog:
-v1.0.0.1:
+v1.0.0.2:
 - Fixed an issue with saving settings
 - Fixed an issue where the JCB teletruk was not detected properly
 - Added possibility to set a reference orientation for the tool
@@ -45,9 +45,9 @@ Tastenkombinationen:
 GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 
 Changelog:
-v1.0.0.1:
+v1.0.0.2:
 - Problem mit dem Speichern der Einstellungen behoben
-- Porblem mit der Erkennung des JCB Teletruk behoben
+- Problem mit der Erkennung des JCB Teletruk behoben
 - Möglichkeit hinzugefügt, eine Referenzorientierung für das Gerät zu setzen
 ]]></de>
 	</description>
