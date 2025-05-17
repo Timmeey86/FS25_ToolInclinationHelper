@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="98">
 	<author>Farmsim Tim (timmeey86)</author>
-	<version>1.0.0.2</version>
+	<version>1.0.0.3</version>
 	<title>
 		<en>Tool Inclination Helper</en>
 		<de>Werkzeugneigungshelfer</de>
@@ -24,10 +24,11 @@ Hotkeys:
 GitHub link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 
 Changelog:
-v1.0.0.2:
+v1.0.0.3:
 - Fixed an issue with saving settings
 - Fixed an issue where the JCB teletruk was not detected properly
 - Added possibility to set a reference orientation for the tool
+- Fixed an issue where tools with multiple store categories wouldn't be detected
 ]]></en>
 		<de><![CDATA[
 Beschreibung: Diese Mod zeigt an, ob deine Gabeln (oder andere Geräte) horizontal ausgerichtet sind oder nicht.
@@ -45,10 +46,11 @@ Tastenkombinationen:
 GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 
 Changelog:
-v1.0.0.2:
+v1.0.0.3:
 - Problem mit dem Speichern der Einstellungen behoben
 - Problem mit der Erkennung des JCB Teletruk behoben
 - Möglichkeit hinzugefügt, eine Referenzorientierung für das Gerät zu setzen
+- Problem mit der Erkennung von Geräten mit mehreren Shop-Kategorien behoben
 ]]></de>
 	</description>
 	

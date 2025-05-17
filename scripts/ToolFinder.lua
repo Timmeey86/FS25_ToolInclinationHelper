@@ -38,6 +38,27 @@ function ToolFinder:findSupportedTool(vehicle)
 	return nil
 end
 
+---Finds out if the given category is supported by this mod
+---If category is a whitespace separated list of categories, it will return true if at least one of the categories is supported
+---@param category string @The category to check
+---@return boolean @True if the category is supported or contains at least one category which is supported, false otherwise
+function ToolFinder.categoryIsSupported(category)
+	if not category then
+		return false
+	end
+	local categories = {}
+	-- Split by whitespace
+	for str in string.gmatch(category, "([^%s]+)") do
+		table.insert(categories, str)
+	end
+	for _, partialCategory in ipairs(categories) do
+		if supportedCategories[partialCategory] then
+			return true
+		end
+	end
+	return false
+end
+
 ---Tries finding a supported tool somewhere in the or attached to the given vehicle. Don't call this directly, use findSupportedTool instead.
 ---@param vehicle Vehicle @The vehicle to search in
 ---@return table|nil @The found tool or nil if no tool was found
@@ -62,7 +83,7 @@ function ToolFinder.searchForSupportedToolIn(vehicle)
 	for _, implement in pairs(attacherSpec.attachedImplements) do
 		if implement.object ~= nil then
 			category = getXMLString(implement.object.xmlFile.handle, "vehicle.storeData.category")
-			if supportedCategories[category] then
+			if ToolFinder.categoryIsSupported(category) then
 				-- Tool found, return the tool
 				return implement.object
 			else
