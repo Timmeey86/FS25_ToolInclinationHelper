@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="94">
+<modDesc descVersion="98">
 	<author>Farmsim Tim (timmeey86)</author>
 	<version>1.0.0.2</version>
 	<title>
@@ -40,7 +40,7 @@ Beachte, dass die standardmäßige "ebene" Ausrichtung und der Abstand vom Boden
 Wenn du die standardmäßige Ausrichtung und/oder den Abstand vom Boden ändern möchtest, kannst du das Gerät in die gewünschte Position und Ausrichtung bringen und [Strg] [Umschalt] [R] drücken, um die aktuelle Position als 0° und 0m vom Boden zu speichern. Die Anzeige zeigt ab dann immer den Unterschied zu dieser Position/Ausrichtung an.
 
 Tastenkombinationen:
-- [Ctrl] [Shift] [R]: Speichert die aktuelle Position und Ausrichtung als Referenz
+- [Strg] [Umschalt] [R]: Speichert die aktuelle Position und Ausrichtung als Referenz
 
 GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 
