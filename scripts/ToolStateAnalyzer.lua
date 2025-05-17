@@ -3,22 +3,14 @@
 ToolStateAnalyzer = {}
 
 ---Retrieves the inclination for the current tool
+---@param tool table @The current tool (vehicle, or a subcomponent in case of forklifts)
 ---@param vehicle Vehicle @The current vehicle
+---@param ignoreReferenceInclination boolean|nil @True if the reference inclination should be ignored, e.g. because a new reference inlination shall be calculated
 ---@return boolean @True if a valid inclination was found
 ---@return number|nil @The inclination
----@param ignoreReferenceInclination boolean|nil @True if the reference inclination should be ignored, e.g. because a new reference inlination shall be calculated
----@return table|nil @The tool or component which was found
-function ToolStateAnalyzer.getCurrentToolInclination(vehicle, ignoreReferenceInclination)
+function ToolStateAnalyzer.getCurrentToolInclination(tool, vehicle, ignoreReferenceInclination)
 	if not g_localPlayer or vehicle == nil or vehicle ~= g_localPlayer:getCurrentVehicle() or not g_currentMission then
 		-- Only render for the current vehicle
-		return false
-	end
-
-	-- Check if there is a tool we can handle
-	-- TODO: Optimization: We could probably cache the tool. We would however have to make sure we catch every player action which should update the cache
-	--                     like attaching/detaching the tool etc.
-	local tool = ToolFinder.findSupportedTool(vehicle)
-	if not tool or (not tool.rootNode and not tool.node) then
 		return false
 	end
 

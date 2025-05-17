@@ -1,14 +1,47 @@
 ---This class is responsible for finding forks or similar tools attached to the player vehicle
 ---@class ToolFinder
 ToolFinder = {}
+local ToolFinder_mt = Class(ToolFinder)
 
+---Creates a new instance of the ToolFinder
+---@param settings TIHSettings @The settings object which stores reference orientations
+---@return ToolFinder @The new instance
+function ToolFinder.new(settings)
+	local self = setmetatable({}, ToolFinder_mt)
+	self.settings = settings
+	return self
+end
 
 local supportedCategories = {}
 supportedCategories["teleLoaderTools"] = true
 supportedCategories["wheelLoaderTools"] = true
 supportedCategories["skidSteerTools"] = true
 supportedCategories["frontLoaderTools"] = true
-function ToolFinder.findSupportedTool(vehicle)
+
+---Tries finding a supported tool somewhere in the or attached to the given vehicle.
+---If reference settings were stored for the tool, they will be applied in here as well.
+---@param vehicle Vehicle @The vehicle to search in
+---@return table|nil @The found tool or nil if no tool was found
+function ToolFinder:findSupportedTool(vehicle)
+	local tool = ToolFinder.searchForSupportedToolIn(vehicle)
+	if tool and (tool.rootNode or tool.node) then
+		if not tool.referenceIdentifier then
+			tool.referenceIdentifier = ToolReferenceOrientationHandler.buildVehicleIdentifier(tool, vehicle)
+			if self.settings.referenceSettings[tool.referenceIdentifier] ~= nil then
+				-- Restore reference info from XML or from identical tools
+				tool.referenceInclination = self.settings.referenceSettings[tool.referenceIdentifier].inclination
+				tool.referenceGroundDistance = self.settings.referenceSettings[tool.referenceIdentifier].groundDistance
+			end
+		end
+		return tool
+	end
+	return nil
+end
+
+---Tries finding a supported tool somewhere in the or attached to the given vehicle. Don't call this directly, use findSupportedTool instead.
+---@param vehicle Vehicle @The vehicle to search in
+---@return table|nil @The found tool or nil if no tool was found
+function ToolFinder.searchForSupportedToolIn(vehicle)
 	if not vehicle then return nil end
 	local category = getXMLString(vehicle.xmlFile.handle, "vehicle.storeData.category")
 	if not category then return nil end

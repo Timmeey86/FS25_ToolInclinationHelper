@@ -10,6 +10,7 @@ UICoordinates = {}
 ---@field colorCoding boolean @True if numbers shall be colored
 ---@field invertArrows boolean @True if the up/down icons shall be inverted
 ---@field baseLocation UICoordinates @The point of reference for the location of the UI icons
+---@field referenceSettings table @A table containing reference inclination and distance to ground for each tool
 TIHSettings = {
 	DISPLAY_MODES = {
 		ICONS = 1,
@@ -29,6 +30,7 @@ function TIHSettings.new()
 	self.displayMode = TIHSettings.DISPLAY_MODES.NUMBERS
 	self.colorCoding = true
 	self.invertArrows = false
+	self.referenceSettings = {}
 	return self
 end
 

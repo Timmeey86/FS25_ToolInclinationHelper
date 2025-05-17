@@ -7,6 +7,9 @@ ToolInclinationHelper.settings = TIHSettings.new()
 -- Overwrite with settings from XML, if those are available
 TIHSettingsRepository.restoreSettings(ToolInclinationHelper.settings)
 
+ToolInclinationHelper.toolFinder = ToolFinder.new(ToolInclinationHelper.settings)
+ToolInclinationHelper.referenceOrientationHandler = ToolReferenceOrientationHandler.new(ToolInclinationHelper.settings, ToolInclinationHelper.toolFinder)
+
 Mission00.loadMission00Finished = Utils.appendedFunction(Mission00.loadMission00Finished, function()
 
 	-- Save settings when the savegame is being saved
@@ -26,10 +29,13 @@ Mission00.loadMission00Finished = Utils.appendedFunction(Mission00.loadMission00
 	-- Note that overwriting HUD.drawControlledEntityHUD at this point in time seems to be too late, so we overwrite the function in the instance instead.
 	g_currentMission.hud.drawControlledEntityHUD = Utils.appendedFunction(g_currentMission.hud.drawControlledEntityHUD, function(self)
 		if self.isVisible then
-			local isVisible, inclination, tool = ToolStateAnalyzer.getCurrentToolInclination(self.controlledVehicle)
-			local distanceToGround = ToolStateAnalyzer.getDistanceFromGround(self.controlledVehicle, tool)
-			ToolInclinationHelper.hud:setState(isVisible, inclination, distanceToGround)
-			ToolInclinationHelper.hud:drawHUD()
+			local tool = ToolInclinationHelper.toolFinder:findSupportedTool(self.controlledVehicle)
+			if tool then
+				local isVisible, inclination = ToolStateAnalyzer.getCurrentToolInclination(tool, self.controlledVehicle, false)
+				local distanceToGround = ToolStateAnalyzer.getDistanceFromGround(self.controlledVehicle, tool, false)
+				ToolInclinationHelper.hud:setState(isVisible, inclination, distanceToGround)
+				ToolInclinationHelper.hud:drawHUD()
+			end
 		end
 	end)
 end)

@@ -8,7 +8,12 @@ TIHSettingsRepository = {
 	YOFFSET_KEY = "yOffset",
 	DISPLAY_MODE = "displayMode",
 	COLOR_CODING = "colorCoding",
-	INVERT_ARROWS = "invertArrows"
+	INVERT_ARROWS = "invertArrows",
+	REFERENCE_SETTINGS = "referenceSettings",
+	REFERENCE_SETTING = "referenceSetting",
+	REF_IDENTIFIER = "identifier",
+	REF_INCLINATION = "inclination",
+	REF_DISTANCE = "distanceToGround"
 }
 
 ---Writes the settings to our own XML file
@@ -31,6 +36,17 @@ function TIHSettingsRepository.storeSettings(settings)
 	setXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.COLOR_CODING), settings.colorCoding)
 	setXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.INVERT_ARROWS), settings.invertArrows)
 
+	local referenceSettingsProperty = TIHSettingsRepository.getXMLSubPath(TIHSettingsRepository.REFERENCE_SETTINGS)
+	local referenceSettingBasePath = ("%s.%s"):format(referenceSettingsProperty, TIHSettingsRepository.REFERENCE_SETTING)
+
+	local i = 0
+	for identifier, referenceSetting in pairs(settings.referenceSettings) do
+		local key = ("%s(%s)"):format(referenceSettingBasePath, i)
+		setXMLString(xmlFileId, ("%s#%s"):format(key, TIHSettingsRepository.REF_IDENTIFIER), identifier)
+		setXMLFloat(xmlFileId, ("%s#%s"):format(key, TIHSettingsRepository.REF_INCLINATION), referenceSetting.inclination)
+		setXMLFloat(xmlFileId, ("%s#%s"):format(key, TIHSettingsRepository.REF_DISTANCE), referenceSetting.groundDistance)
+		i = i + 1
+	end
 	-- Write the XML file to disk
 	saveXMLFile(xmlFileId)
 end
@@ -65,6 +81,32 @@ function TIHSettingsRepository.restoreSettings(settings)
 	settings.displayMode = getXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.DISPLAY_MODE)) or settings.displayMode
 	settings.colorCoding = getXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.COLOR_CODING)) or settings.colorCoding
 	settings.invertArrows = getXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.INVERT_ARROWS)) or settings.invertArrows
+
+	settings.referenceSettings = {}
+	local referenceSettingsProperty = TIHSettingsRepository.getXMLSubPath(TIHSettingsRepository.REFERENCE_SETTINGS)
+	if hasXMLProperty(xmlFileId, referenceSettingsProperty) then
+		print(MOD_NAME .. ": Restoring reference settings")
+		local i = 0
+		local referenceSettingBasePath = ("%s.%s"):format(referenceSettingsProperty, TIHSettingsRepository.REFERENCE_SETTING)
+		while true do
+			local key = ("%s(%d)"):format(referenceSettingBasePath, i)
+			if not hasXMLProperty(xmlFileId, key) then
+				break
+			end
+			local identifier = getXMLString(xmlFileId, ("%s#%s"):format(key, TIHSettingsRepository.REF_IDENTIFIER))
+			local referenceSetting = {
+				inclination = getXMLFloat(xmlFileId, ("%s#%s"):format(key, TIHSettingsRepository.REF_INCLINATION)),
+				groundDistance = getXMLFloat(xmlFileId, ("%s#%s"):format(key, TIHSettingsRepository.REF_DISTANCE))
+			}
+			if identifier ~= nil and referenceSetting.inclination ~= nil and referenceSetting.groundDistance ~= nil then
+				settings.referenceSettings[identifier] = referenceSetting
+			else
+				Logging.warning("%s: Failed reading reference setting #%d from XML file", MOD_NAME, i)
+			end
+			i = i + 1
+		end
+	end
+
 	print(MOD_NAME .. ": Successfully restored settings")
 end
 
