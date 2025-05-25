@@ -56,7 +56,7 @@ function ToolReferenceOrientationHandler:updateActionEvents(vehicle)
 	end
 	local currentVehicle = g_localPlayer and g_localPlayer:getCurrentVehicle()
 	if currentVehicle and vehicle ~= currentVehicle then
-		printf("BUGFIX: Received update call for an old vehicle. Registering action events for the current one and sending a new update call")
+		-- BUGFIX: Received update call for an old vehicle. Registering action events for the current one and sending a new update call
 		currentVehicle:updateActionEvents() -- This will also register the event since that's what the base game function does
 		return
 	end
