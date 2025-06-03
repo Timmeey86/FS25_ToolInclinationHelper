@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="98">
+<modDesc descVersion="99">
 	<author>Farmsim Tim (timmeey86)</author>
-	<version>1.0.0.4</version>
+	<version>1.0.0.5</version>
 	<title>
 		<en>Tool Inclination Helper</en>
 		<de>Werkzeugneigungshelfer</de>
@@ -24,6 +24,9 @@ Hotkeys:
 GitHub link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 
 Changelog:
+v1.0.0.5:
+- Fixed an issue where the previous update would break some keybinds of other mods, especially Courseplay
+
 v1.0.0.4:
 - Fixed an issue with saving settings
 - Fixed an issue where the JCB teletruk was not detected properly
@@ -46,6 +49,9 @@ Tastenkombinationen:
 GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 
 Changelog:
+v1.0.0.5:
+- Problem behoben, durch das einige Tastenkürzel von anderen Mods, insbesondere Courseplay, nicht mehr funktionierten
+
 v1.0.0.4:
 - Problem mit dem Speichern der Einstellungen behoben
 - Problem mit der Erkennung des JCB Teletruk behoben
@@ -66,9 +72,11 @@ v1.0.0.4:
 		<sourceFile filename="scripts/ToolFinder.lua" />
 		<sourceFile filename="scripts/ToolStateAnalyzer.lua" />
 		<sourceFile filename="scripts/ToolInclinationHUD.lua" />
-		<sourceFile filename="scripts/ToolReferenceOrientationHandler.lua" />
 		<sourceFile filename="scripts/ToolInclinationHelper.lua" />
 	</extraSourceFiles>
+	<specializations>
+		<specialization name="toolReferenceOrientationHandler" className="ToolReferenceOrientationHandler" filename="scripts/ToolReferenceOrientationHandler.lua" />
+	</specializations>
 	<actions>
 		<action name="SET_TOOL_INCLINATION_REFERENCE" category="VEHICLE" axis="HALF" />
 	</actions>

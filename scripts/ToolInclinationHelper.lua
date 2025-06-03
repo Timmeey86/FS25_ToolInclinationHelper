@@ -8,12 +8,25 @@ ToolInclinationHelper.settings = TIHSettings.new()
 TIHSettingsRepository.restoreSettings(ToolInclinationHelper.settings)
 
 ToolInclinationHelper.toolFinder = ToolFinder.new(ToolInclinationHelper.settings)
-ToolInclinationHelper.referenceOrientationHandler = ToolReferenceOrientationHandler.new(ToolInclinationHelper.settings, ToolInclinationHelper.toolFinder)
+
+
+TypeManager.finalizeTypes = Utils.prependedFunction(TypeManager.finalizeTypes, function(typeManager)
+	if typeManager.typeName == "vehicle" then
+		-- Inject dependencies now
+		ToolReferenceOrientationHandler.injectDependencies(ToolInclinationHelper.settings, ToolInclinationHelper.toolFinder)
+
+		-- Register our specialization for all vehicle types for now. We don't have a reliable way to figure out if the vehicle actually is 
+		-- supported at this point
+		for typeName, typeEntry in pairs(typeManager.types) do
+			ToolReferenceOrientationHandler.register(typeManager, typeName, typeEntry.specializations)
+		end
+	end
+end)
 
 Mission00.loadMission00Finished = Utils.appendedFunction(Mission00.loadMission00Finished, function()
 
 	-- Save settings when the savegame is being saved
-    ItemSystem.save = Utils.prependedFunction(ItemSystem.save, function()
+	ItemSystem.save = Utils.prependedFunction(ItemSystem.save, function()
 		TIHSettingsRepository.storeSettings(ToolInclinationHelper.settings)
 	end)
 

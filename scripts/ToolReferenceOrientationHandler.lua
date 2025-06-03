@@ -1,77 +1,112 @@
 ---This class is responsible for giving the player the possibility to set a reference height/orientation for any tool
 ---@class ToolReferenceOrientationHandler
+---@field SPEC_NAME string @The name of the specialization
+---@field spec_toolReferenceOrientationHandler table @Stores the specialization's data
 ---@field settings TIHSettings @The settings object to store reference orientations in
 ---@field toolFinder ToolFinder @The object which can find supported tools
-ToolReferenceOrientationHandler = {}
-local ToolReferenceOrientationHandler_mt = Class(ToolReferenceOrientationHandler)
+ToolReferenceOrientationHandler = {
+	SPEC_NAME = g_currentModName .. ".toolReferenceOrientationHandler",
+	SPEC_TABLE = "spec_" .. g_currentModName .. "toolReferenceOrientationHandler"
+}
 
----Creates a new instance of the ToolReferenceOrientationHandler
+---Injects dependencies to the class (not a specific instance!) so they can be used by the specializations
 ---@param settings TIHSettings @The settings object to store reference orientations in
 ---@param toolFinder ToolFinder @The object which can find supported tools
-function ToolReferenceOrientationHandler.new(settings, toolFinder)
-	local self = setmetatable({}, ToolReferenceOrientationHandler_mt)
-	self.settings = settings
-	self.toolFinder = toolFinder
-
-	-- VehicleDebug.registerActionEvents seems to be the perfect point in time to register action events at. 
-	-- We don't want to depend on a specific specialization
-	VehicleDebug.registerActionEvents = Utils.appendedFunction(VehicleDebug.registerActionEvents, function(vehicle, ...)
-		self:registerActionEvents(vehicle, ...)
-	end)
-	Vehicle.updateActionEvents = Utils.appendedFunction(Vehicle.updateActionEvents, function(vehicle, ...)
-		self:updateActionEvents(vehicle, ...)
-	end)
+function ToolReferenceOrientationHandler.injectDependencies(settings, toolFinder)
+	ToolReferenceOrientationHandler.settings = settings
+	ToolReferenceOrientationHandler.toolFinder = toolFinder
 end
 
+---Registers the specialization with the type manager so it can be assigned to vehicles
+---@param typeManager table @The type manager to register the specialization with
+---@param typeName string @The vehicle type name
+---@param specializations table @The list of specializations to check for prerequisites
+function ToolReferenceOrientationHandler.register(typeManager, typeName, specializations)
+	if ToolReferenceOrientationHandler.prerequesitesPresent(specializations) then
+		typeManager:addSpecialization(typeName, ToolReferenceOrientationHandler.SPEC_NAME)
+	end
+end
+
+---Initializes the specialization
+function ToolReferenceOrientationHandler.initSpecialization()
+	-- Nothing to do right now
+end
+
+---Makes sure any dependent specializations are loaded
+---@param specializations table @The list of specializations to check
+function ToolReferenceOrientationHandler.prerequesitesPresent(specializations)
+	-- TODO: Find a way so we add this only to supported vehicles
+	return true -- SpecializationUtil.hasSpecialization(AttacherJoints, specializations)
+end
+
+---Reacts on action event events in order to offer the "Set Tool Inclination Reference" action
+---@param vehicleType table @The vehicle type to register the action events for
+function ToolReferenceOrientationHandler.registerEventListeners(vehicleType)
+	SpecializationUtil.registerEventListener(vehicleType, "onRegisterActionEvents", ToolReferenceOrientationHandler)
+	SpecializationUtil.registerEventListener(vehicleType, "onUpdate", ToolReferenceOrientationHandler)
+	SpecializationUtil.registerEventListener(vehicleType, "onLoad", ToolReferenceOrientationHandler)
+end
+
+---Initializes the specialization so values can be referenced from multiple event handlers
+function ToolReferenceOrientationHandler:onLoad(savegame)
+	self[ToolReferenceOrientationHandler.SPEC_TABLE] = {
+		actionEvents = {}
+	}
+end
 
 ---Registers the action event for setting the reference orientation
----@param vehicle Vehicle @Ignored since this parameter seems unreliable
-function ToolReferenceOrientationHandler:registerActionEvents(vehicle)
-	if vehicle.rootVehicle ~= vehicle then
-		-- Implement: Ignore. We'll get a call for the root vehicle, too
+---@param isActiveForInput boolean @True if the vehicle is active for input
+---@param isActiveForInputIgnoreSelection boolean @True if the vehicle is active for input, even if it is not selected
+function ToolReferenceOrientationHandler:onRegisterActionEvents(isActiveForInput, isActiveForInputIgnoreSelection)
+	local spec = self[ToolReferenceOrientationHandler.SPEC_TABLE]
+	if not spec then
 		return
 	end
-	if not vehicle:getIsActiveForInput(true) then
-		-- The call probably references the previous vehicle. ignore it
+
+	self:clearActionEventsTable(spec.actionEvents)
+	if not isActiveForInputIgnoreSelection then
 		return
 	end
+
 	local isValid
-	isValid, vehicle.toolInclinationReferenceActionEvent = vehicle:addActionEvent(
-		vehicle.actionEvents, "SET_TOOL_INCLINATION_REFERENCE", self, ToolReferenceOrientationHandler.setReferenceOrientation,
+	isValid, spec.toolInclinationReferenceActionEvent = self:addActionEvent(
+		spec.actionEvents, "SET_TOOL_INCLINATION_REFERENCE", self, ToolReferenceOrientationHandler.setReferenceOrientation,
 		false, true, false, true, nil)
 	if not isValid then
 		Logging.warning("%s: Failed registering action event for setting the reference orientation", MOD_NAME)
 	else
-		g_inputBinding:setActionEventTextPriority(self.toolInclinationReferenceActionEvent, GS_PRIO_VERY_LOW)
-		g_inputBinding:setActionEventActive(self.toolInclinationReferenceActionEvent, false)
-		g_inputBinding:setActionEventText(self.toolInclinationReferenceActionEvent, g_i18n:getText("input_SET_TOOL_INCLINATION_REFERENCE"))
+		g_inputBinding:setActionEventTextPriority(spec.toolInclinationReferenceActionEvent, GS_PRIO_VERY_LOW)
+		g_inputBinding:setActionEventText(spec.toolInclinationReferenceActionEvent, g_i18n:getText("input_SET_TOOL_INCLINATION_REFERENCE"))
+		ToolReferenceOrientationHandler.updateActionEvents(self)
 	end
 end
 
 ---Updates action events based on the current vehicle and vehicle state
----@param vehicle Vehicle @Ignored since this parameter seems unreliable
-function ToolReferenceOrientationHandler:updateActionEvents(vehicle)
-	if vehicle.rootVehicle ~= vehicle then
+function ToolReferenceOrientationHandler:updateActionEvents()
+	local spec = self[ToolReferenceOrientationHandler.SPEC_TABLE]
+	if not spec then
 		return
 	end
+
+	-- Ignore everything except for the current root vehicle
 	local currentVehicle = g_localPlayer and g_localPlayer:getCurrentVehicle()
-	if currentVehicle and vehicle ~= currentVehicle then
-		-- When switching vehicles, the game sometimes send update calls for the old vehicle after already being in the new one.
-		-- This can completely mess up the F1 menu, so we call the same method again, but for the correct vehicle in order to get a working menu
-		currentVehicle:updateActionEvents() -- This will also register the event since that's what the base game function does
+	if not currentVehicle or currentVehicle ~= self then
 		return
 	end
-	if not vehicle:getIsActiveForInput(true) then
-		-- This might not be possible due to the previous check
-		return
+
+	local eventActive = false
+	if self:getIsActiveForInput(true) and spec.toolInclinationReferenceActionEvent then
+		local tool = ToolReferenceOrientationHandler.toolFinder:findSupportedTool(self)
+		eventActive = (tool and (tool.rootNode or tool.node)) ~= nil
 	end
-	if not vehicle.toolInclinationReferenceActionEvent then
-		-- We couldn't register our action => we can't execute it
-		return
-	end
-	local tool = self.toolFinder:findSupportedTool(vehicle)
 	-- Display the action event as long as a supported tool was found
-	g_inputBinding:setActionEventActive(vehicle.toolInclinationReferenceActionEvent, tool and (tool.rootNode or tool.node))
+	g_inputBinding:setActionEventActive(spec.toolInclinationReferenceActionEvent, eventActive)
+end
+
+---Disables the action event as soon as the player does something which causes the tool to no longer be supported (e.g. detaching)
+---@param dt number @The delta time since the last update
+function ToolReferenceOrientationHandler:onUpdate(dt)
+	ToolReferenceOrientationHandler.updateActionEvents(self)
 end
 
 ---Builds an identifier which is unique for each buyable vehicle, but equal for multiple instance of it across different saves
@@ -100,8 +135,13 @@ function ToolReferenceOrientationHandler:setReferenceOrientation()
 		-- Shouldn't be possible, but just in case
 		return
 	end
+
+	local spec = self[ToolReferenceOrientationHandler.SPEC_TABLE]
+	if not spec then
+		return
+	end
 	-- Get the current inclination
-	local tool = self.toolFinder:findSupportedTool(vehicle)
+	local tool = ToolReferenceOrientationHandler.toolFinder:findSupportedTool(vehicle)
 	if not tool then
 		Logging.error("%s: Triggered setReferenceOrientation, but no supported tool was found. This means the action was registered and activated in a case where that should not be possible", MOD_NAME)
 		return
@@ -122,7 +162,7 @@ function ToolReferenceOrientationHandler:setReferenceOrientation()
 		end
 
 		-- Store the values in the settings. They will get saved by TIHSettingsRepository when the player saves the game the next time
-		self.settings.referenceSettings[identifier] = {
+		ToolReferenceOrientationHandler.settings.referenceSettings[identifier] = {
 			inclination = tool.referenceInclination,
 			groundDistance = tool.referenceGroundDistance
 		}
