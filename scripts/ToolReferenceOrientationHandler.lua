@@ -64,6 +64,14 @@ function ToolReferenceOrientationHandler:onRegisterActionEvents(isActiveForInput
 	end
 
 	self:clearActionEventsTable(spec.actionEvents)
+
+	-- Register the action only for the root vehicle
+	local currentVehicle = g_localPlayer and g_localPlayer:getCurrentVehicle()
+	if not currentVehicle or currentVehicle ~= self then
+		return
+	end
+
+	-- Register the action no matter which implement is currently selected. We don't want the user to have to select the tool first
 	if not isActiveForInputIgnoreSelection then
 		return
 	end
