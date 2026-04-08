@@ -110,12 +110,18 @@ end
 ---@return table|nil @The UI component for the forks
 function ToolFinder.findForkliftForks(vehicle)
 
-	if vehicle.forkComponentIndex ~= nil then
-		return vehicle.components[vehicle.forkComponentIndex]
+	if vehicle.forkComponentIndex then
+		if vehicle.forkComponentIndex > 0 then
+			return vehicle.components[vehicle.forkComponentIndex]
+		else
+			-- Vehicle has already been checked, but no forks were found
+			return nil
+		end
 	end
 
-	-- Load the i3D as an XML file in order to find values.
+	-- Else: Load the i3D as an XML file in order to find values.
 	-- Only do this once for each vehicle, however
+	vehicle.forkComponentIndex = 0
 	local i3dAsXml = XMLFile.load("Vehicle i3D as XML", vehicle.i3dFilename, nil)
 	if i3dAsXml then
 		-- Try finding the first component which has "forks" in the name. Any mod which names the components like Giants does, will be supported that way
@@ -136,8 +142,9 @@ function ToolFinder.findForkliftForks(vehicle)
 			end
 		end)
 	end
+	i3dAsXml:delete()
 
-	if vehicle.forkComponentIndex then
+	if vehicle.forkComponentIndex > 0 then
 		return vehicle.components[vehicle.forkComponentIndex]
 	end
 	return nil
