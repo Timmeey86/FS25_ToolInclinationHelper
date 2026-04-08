@@ -128,7 +128,7 @@ function ToolFinder.findForkliftForks(vehicle)
 		-- That seems like the best option for now
 		i3dAsXml:iterate("i3D.Scene.Shape", function(index, shapeXmlPath)
 			local shapeName = i3dAsXml:getString(shapeXmlPath .. "#name")
-			if shapeName:find("fork") then
+			if shapeName:find("fork") or shapeName:find("tine") then
 				print(MOD_NAME .. ": Found forks in component # " .. tostring(index))
 				vehicle.forkComponentIndex = index
 				local translation = i3dAsXml:getVector(shapeXmlPath .. "#translation")
