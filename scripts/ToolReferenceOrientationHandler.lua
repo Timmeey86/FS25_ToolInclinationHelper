@@ -6,7 +6,7 @@
 ---@field toolFinder ToolFinder @The object which can find supported tools
 ToolReferenceOrientationHandler = {
 	SPEC_NAME = g_currentModName .. ".toolReferenceOrientationHandler",
-	SPEC_TABLE = "spec_" .. g_currentModName .. "toolReferenceOrientationHandler"
+	SPEC_TABLE = "spec_" .. g_currentModName .. ".toolReferenceOrientationHandler"
 }
 
 ---Injects dependencies to the class (not a specific instance!) so they can be used by the specializations
@@ -22,7 +22,7 @@ end
 ---@param typeName string @The vehicle type name
 ---@param specializations table @The list of specializations to check for prerequisites
 function ToolReferenceOrientationHandler.register(typeManager, typeName, specializations)
-	if ToolReferenceOrientationHandler.prerequesitesPresent(specializations) then
+	if ToolReferenceOrientationHandler.prerequisitesPresent(specializations) then
 		typeManager:addSpecialization(typeName, ToolReferenceOrientationHandler.SPEC_NAME)
 	end
 end
@@ -34,7 +34,7 @@ end
 
 ---Makes sure any dependent specializations are loaded
 ---@param specializations table @The list of specializations to check
-function ToolReferenceOrientationHandler.prerequesitesPresent(specializations)
+function ToolReferenceOrientationHandler.prerequisitesPresent(specializations)
 	-- TODO: Find a way so we add this only to supported vehicles
 	return true -- SpecializationUtil.hasSpecialization(AttacherJoints, specializations)
 end
