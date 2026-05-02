@@ -30,7 +30,8 @@ ToolInclinationHUD = {
 		BG = { 0, 0, 32, 32 },
 		LINE =  { 33, 25, 24, 3},
 		UPARROW = { 33, 0, 24, 24 },
-		DOWNARROW = { 57, 0, 24, 24 }
+		DOWNARROW = { 57, 0, 24, 24 },
+		REF_SIZE = { 128, 32 }
 	},
 	-- Define colors of things
 	COLORS = {
@@ -68,7 +69,7 @@ function ToolInclinationHUD:createElement(position, size, uvDimensions, colors)
 	overlay.isVisible = true
 	local element = HUDElement.new(overlay)
 	if uvDimensions then
-		element:setUVs(GuiUtils.getUVs(uvDimensions))
+		element:setUVs(GuiUtils.getUVs(uvDimensions, ToolInclinationHUD.UV_DIMENSIONS.REF_SIZE))
 	end
 	element:setColor(table.unpack(colors))
 	return element

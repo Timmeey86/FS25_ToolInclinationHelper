@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="107">
+<modDesc descVersion="108">
 	<author>Farmsim Tim (timmeey86)</author>
-	<version>1.0.1.0</version>
+	<version>1.0.1.1</version>
 	<title>
 		<en>Tool Inclination Helper</en>
 		<de>Werkzeugneigungshelfer</de>
@@ -24,9 +24,10 @@ Hotkeys:
 GitHub link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 
 Changelog:
-v1.0.1.0:
+v1.0.1.1:
 - Fixed a memory leak which happened with unsupported forklifts
 - Added support for the HUBTEX MAXX 45 forklift mod
+- Reduced mod size
 
 v1.0.0.6:
 - Fixed an issue where the previous update would break some keybinds of other mods, especially Courseplay
@@ -53,9 +54,10 @@ Tastenkombinationen:
 GitHub-Link: https://github.com/Timmeey86/FS25_ToolInclinationHelper
 
 Changelog:
-v1.0.1.0:
+v1.0.1.1:
 - Speicherleck behoben, das bei nicht unterstützten Gabelstaplern auftrat
 - Unterstützung für den HUBTEX MAXX 45 Gabelstapler Mod hinzugefügt
+- Mod-Größe reduziert
 
 
 v1.0.0.6:
