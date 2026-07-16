@@ -79,8 +79,15 @@ function TIHSettingsRepository.restoreSettings(settings)
 	settings.baseLocation.xOffset = getXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.XOFFSET_KEY, baseLocationProperty)) or settings.baseLocation.xOffset
 	settings.baseLocation.yOffset = getXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.YOFFSET_KEY, baseLocationProperty)) or settings.baseLocation.yOffset
 	settings.displayMode = getXMLInt(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.DISPLAY_MODE)) or settings.displayMode
-	settings.colorCoding = getXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.COLOR_CODING)) or settings.colorCoding
-	settings.invertArrows = getXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.INVERT_ARROWS)) or settings.invertArrows
+	-- Note: `or` would discard a stored `false`, so these need an explicit nil check
+	local storedColorCoding = getXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.COLOR_CODING))
+	if storedColorCoding ~= nil then
+		settings.colorCoding = storedColorCoding
+	end
+	local storedInvertArrows = getXMLBool(xmlFileId, TIHSettingsRepository.getPathForStateAttribute(TIHSettingsRepository.INVERT_ARROWS))
+	if storedInvertArrows ~= nil then
+		settings.invertArrows = storedInvertArrows
+	end
 
 	settings.referenceSettings = {}
 	local referenceSettingsProperty = TIHSettingsRepository.getXMLSubPath(TIHSettingsRepository.REFERENCE_SETTINGS)
