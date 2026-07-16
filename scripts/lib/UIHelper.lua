@@ -4,7 +4,8 @@
 ---version 1.2
 ---Changelog:
 ---v1.1: Fixed choice controls when using string values
----v1.2: Chioce controls can now be nillable, too
+---v1.2: Choice controls can now be nillable, too
+---v1.3: Fix bool elements which can have invalid slider positions
 ---@class UIHelper
 UIHelper = {}
 
@@ -219,6 +220,9 @@ end
 ---@param controls table @A list of controls
 function UIHelper.registerFocusControls(controls)
 	FocusManager.setGui = Utils.appendedFunction(FocusManager.setGui, function(_, gui)
+		if gui == nil then
+			return
+		end
 		for _, control in ipairs(controls) do
 			if not control.focusId or not FocusManager.currentFocusData.idToElementMapping[control.focusId] then
 				if not FocusManager:loadElementFromCustomValues(control, nil, nil, false, false) then
@@ -227,6 +231,11 @@ function UIHelper.registerFocusControls(controls)
 			end
 		end
 		local settingsPage = g_gui.screenControllers[InGameMenu].pageSettings
+		if settingsPage == nil then
+			Logging.warning("Settings page is nil. This should never happen")
+			printCallstack()
+			return
+		end
 		-- Invalidate the layout in order to relink items properly
 		settingsPage.generalSettingsLayout:invalidateLayout()
 	end)
@@ -355,7 +364,7 @@ end
 ---@param control table @The UI control
 ---@param value number @The value which shall be displayed to the user
 function UIHelper.setBoolValue(control, value)
-	control.elements[1]:setState(value and 2 or 1)
+	control.elements[1]:setState(value and BinaryOptionElement.STATE_RIGHT or BinaryOptionElement.STATE_LEFT)
 end
 
 ---Gets the current value of a UI yes/no control
@@ -391,3 +400,11 @@ function UIHelper.getControlValue(control, controlState)
 		return UIHelper.getBoolValue(controlState)
 	end
 end
+
+-- Bugfix the "slider" of Off/On elements which can sometimes go out of bounds
+BinaryOptionElement.update = Utils.appendedFunction(BinaryOptionElement.update, function(element, _)
+	if element.sliderState < 0 then
+		element.sliderState = 0
+		element.sliderElement:setPosition(0)
+	end
+end)
